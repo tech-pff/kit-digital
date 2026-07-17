@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glosario · Claude para PFF</title>
+<style>
+  :root{
+    --azul:#13315c; --azul2:#1d4e89; --acento:#2a9d8f; --acento2:#e9c46a;
+    --bg:#f5f7fa; --card:#ffffff; --texto:#1f2937; --suave:#5b6470; --linea:#e3e8ef;
+    --en:#0b6e6e; --enbg:#e6f4f1;
+    --sombra:0 1px 3px rgba(16,38,73,.08),0 6px 20px rgba(16,38,73,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:transparent}
+  body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--texto);line-height:1.6;font-size:16px}
+  .widget{height:100%;overflow-y:auto;max-width:920px;margin:0 auto;padding:2px 14px 22px}
+  a{color:var(--azul2)}
+  .whead{background:linear-gradient(135deg,var(--azul),var(--azul2));color:#fff;border-radius:14px;padding:16px 20px;margin:6px 0 14px}
+  .whead h1{margin:0;font-size:21px;letter-spacing:.2px}
+  .whead .sub{font-size:13.5px;opacity:.9;margin-top:2px}
+  .searchbar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:blur(3px);padding:8px 0 10px;margin-bottom:8px}
+  .search{width:100%;padding:11px 96px 11px 14px;border:1px solid var(--linea);border-radius:10px;font-size:14.5px;background:#fff}
+  .search:focus{outline:none;border-color:var(--acento);box-shadow:0 0 0 3px rgba(42,157,143,.15)}
+  .scount{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12.5px;color:var(--suave);pointer-events:none}
+  mark.hit{background:var(--acento2);color:#3a2f00;border-radius:3px;padding:0 1px}
+  mark.hit.cur{background:#f4a261;box-shadow:0 0 0 2px rgba(244,162,97,.5)}
+  .card{background:var(--card);border:1px solid var(--linea);border-radius:14px;box-shadow:var(--sombra);padding:6px 22px 18px;margin-bottom:14px}
+  .intro{font-size:14.5px;color:var(--suave);margin:12px 0 4px}
+  .letra{color:var(--azul);font-size:14px;font-weight:800;letter-spacing:.08em;border-bottom:2px solid var(--acento);
+    padding-bottom:3px;margin:20px 0 4px}
+  dl{margin:0}
+  dt{font-weight:700;color:var(--azul2);margin-top:14px;font-size:15.5px}
+  dd{margin:2px 0 0 0;font-size:14.5px}
+  .en{background:var(--enbg);color:var(--en);border:1px solid #bfe3dd;border-radius:6px;padding:1px 7px;font-weight:700;font-size:.85em;white-space:nowrap}
+  .src{display:inline-block;background:#eef1f6;border:1px solid var(--linea);border-radius:20px;color:var(--suave);
+    font-size:11.5px;padding:1px 9px;margin-left:6px;vertical-align:middle}
+
+  .toc{background:var(--card);border:1px solid var(--linea);border-radius:12px;box-shadow:var(--sombra);padding:10px 14px;margin:0 0 16px}
+  .toc .toch{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--suave);margin:0 0 8px;font-weight:700}
+  .toc ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .toc li{margin:0}
+  .toc a{display:inline-block;text-decoration:none;color:var(--azul);background:#eef2f8;border:1px solid #d7e0ee;border-radius:20px;padding:4px 11px;font-size:13px}
+  .toc a:hover{background:var(--acento);color:#fff;border-color:var(--acento)}
+  .toc .tocgroup{width:100%;font-size:11px;font-weight:800;color:var(--acento);text-transform:uppercase;letter-spacing:.05em;margin:8px 0 0}
+  details.sec{scroll-margin-top:66px}
+  .letra{scroll-margin-top:66px}
+
+.sitenav{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:rgba(255,255,255,.96);backdrop-filter:blur(3px);border-bottom:1px solid var(--linea);padding:10px 4px;margin-bottom:8px}
+.sitenav a{color:var(--azul2);text-decoration:none;font-size:14px;font-weight:600}
+.sitenav a:hover{text-decoration:underline}
+.sitenav .sitenav-home{color:var(--azul);font-weight:700}
+.sitenav a.active{color:var(--acento)}
+.sitenav-sub{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin:2px 0 12px;padding:0 2px}
+.sitenav-sub a{color:var(--suave);text-decoration:none;font-weight:600}
+.sitenav-sub a.active{color:var(--acento)}
+.sitenav-sub a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="widget">
+  <nav class="sitenav">
+    <a class="sitenav-home" href="../index.html">← Kit Digital</a>
+    <a href="gqueues.html">GQueues</a>
+    <a class="active" href="guia-claude-01-introduccion.html">Guía de Claude</a>
+    <a href="feedback.html">Feedback</a>
+  </nav>
+  <div class="sitenav-sub">
+    <a href="guia-claude-01-introduccion.html">1. Introducción</a>
+    <a href="guia-claude-02-cowork-y-buenas-practicas.html">2. Cowork y buenas prácticas</a>
+    <a href="guia-claude-03-skills-pff.html">3. Skills de PFF</a>
+    <a class="active" href="guia-claude-04-glosario.html">4. Glosario</a>
+  </div>
+  <div class="whead">
+    <h1>Glosario</h1>
+    <div class="sub">Claude para PFF · Todos los términos de la guía en un solo lugar</div>
+  </div>
+
+  <div class="searchbar">
+    <input class="search" id="search" type="search" placeholder="Buscar un término…" autocomplete="off">
+    <span class="scount" id="scount"></span>
+  </div>
+
+  <nav class="toc" id="toc" aria-label="Indice de la pagina"></nav>
+  <div id="contenido">
+    <div class="card">
+      <p class="intro">Reúne los términos definidos a lo largo de la guía. La etiqueta al final de cada término indica en qué página se explica con más detalle.</p>
+
+      <div class="letra">A</div>
+      <dl>
+        <dt>Archivo .skill <span class="src">Skills de PFF</span></dt>
+        <dd>Una skill empaquetada en un solo archivo (parecido a un .zip), lista para instalar. Por dentro contiene el SKILL.md y, según la tarea, carpetas de apoyo.</dd>
+      </dl>
+
+      <div class="letra">C</div>
+      <dl>
+        <dt>Changelog <span class="src">Skills de PFF</span></dt>
+        <dd>Archivo (CHANGELOG.md) que registra qué cambió en cada versión de una skill y cuándo, para saber qué incluye la versión vigente.</dd>
+
+        <dt>Claude Regular <span class="src">Introducción</span></dt>
+        <dd>El chat de siempre en claude.ai (web, móvil o escritorio). Funciona por turnos: tú escribes, Claude responde. Ideal para consultas rápidas, redacción y analizar un documento que le pegas o subes.</dd>
+
+        <dt>Conector / MCP <span class="src">Skills</span></dt>
+        <dd>Una conexión a una herramienta externa (Gmail, Google Drive, Calendar, Zoom) para que Claude consulte o actúe ahí. MCP es el estándar técnico detrás de los conectores.</dd>
+
+        <dt>Cowork <span class="src">Cowork</span></dt>
+        <dd>Modo "agente" de Claude en la app de escritorio. Ejecuta tareas de varios pasos por su cuenta, con acceso real a tus archivos, y genera entregables completos (Word, Excel, PDF, PowerPoint).</dd>
+      </dl>
+
+      <div class="letra">D</div>
+      <dl>
+        <dt>Distribución centralizada <span class="src">Skills de PFF</span></dt>
+        <dd>Un administrador publica una skill una sola vez en la cuenta de PFF y todo el equipo la recibe; las actualizaciones se propagan desde esa copia central. Editarla en una cuenta individual no afecta a las demás.</dd>
+      </dl>
+
+      <div class="letra">F</div>
+      <dl>
+        <dt>Fuente de verdad <span class="src">Skills de PFF</span></dt>
+        <dd>El único lugar oficial donde vive la versión correcta de algo (por ejemplo, una skill). Aunque circulen copias, solo una es la válida.</dd>
+      </dl>
+
+      <div class="letra">G</div>
+      <dl>
+        <dt>Google Drive for Desktop <span class="src">Cowork</span></dt>
+        <dd>Aplicación que monta Google Drive como una unidad local en tu computadora, para que Cowork pueda leer y escribir esos archivos directamente. También llamada File Stream.</dd>
+      </dl>
+
+      <div class="letra">I</div>
+      <dl>
+        <dt>Instrucciones de perfil <span class="en">Instructions for Claude</span> <span class="src">Buenas prácticas</span></dt>
+        <dd>Texto que tú escribes y que se aplica a todos tus chats y sesiones. Solo tú puedes editarlo; la memoria de un compañero nunca toca tu perfil.</dd>
+
+        <dt>Instrucciones de proyecto <span class="src">Buenas prácticas</span></dt>
+        <dd>Contexto que aplica únicamente a los chats dentro de un proyecto específico. No se comparte con otros proyectos ni con chats sueltos.</dd>
+      </dl>
+
+      <div class="letra">M</div>
+      <dl>
+        <dt>Marketplace <span class="src">Skills de PFF</span></dt>
+        <dd>Un catálogo privado de plugins de la organización: un solo lugar central del que todos instalan los plugins aprobados, con control de versiones y actualización desde un único punto.</dd>
+
+        <dt>Memoria <span class="src">Buenas prácticas</span></dt>
+        <dd>Claude no recuerda automáticamente entre conversaciones: cada chat empieza en blanco. El contexto se conserva por tres vías: instrucciones de perfil, instrucciones de proyecto y memoria de proyectos en Cowork.</dd>
+      </dl>
+
+      <div class="letra">P</div>
+      <dl>
+        <dt>Plantilla <span class="src">Skills de PFF</span></dt>
+        <dd>Un documento base (por ejemplo, en Word) con el formato del despacho, que una skill usa para producir el resultado.</dd>
+
+        <dt>Plugin <span class="src">Skills</span></dt>
+        <dd>Un paquete que agrupa skills, conectores y herramientas, normalmente pensado para un rol o flujo de trabajo.</dd>
+
+        <dt>Prompt <span class="src">Introducción</span></dt>
+        <dd>La instrucción o pregunta que le escribes a Claude. Mientras más claro y específico el prompt, mejor la respuesta.</dd>
+
+        <dt>Proyecto <span class="en">Project</span> <span class="src">Introducción</span></dt>
+        <dd>Un espacio que agrupa chats, archivos e instrucciones sobre un mismo tema o cliente. El contexto se reutiliza entre los chats del proyecto.</dd>
+      </dl>
+
+      <div class="letra">S</div>
+      <dl>
+        <dt>Skill (habilidad) <span class="src">Skills</span></dt>
+        <dd>Una capacidad especializada —un instructivo empaquetado, a veces con herramientas— que Claude carga solo cuando la tarea lo amerita (p. ej. crear un Word o un Excel).</dd>
+
+        <dt>SKILL.md / Markdown (.md) <span class="src">Skills de PFF</span></dt>
+        <dd>El archivo principal de instrucciones de una skill, escrito en Markdown: un formato de texto simple que abre cualquier editor.</dd>
+      </dl>
+
+      <div class="letra">T</div>
+      <dl>
+        <dt>Tarea programada <span class="src">Cowork</span></dt>
+        <dd>Una tarea que Claude ejecuta automáticamente en un horario definido (cada día, cada semana), disponible en Cowork. Se apoya en la skill <b>schedule</b>.</dd>
+
+        <dt>Token <span class="src">Cómo ahorrar tokens</span></dt>
+        <dd>La unidad con la que Claude mide el texto: aproximadamente ¾ de una palabra en español. Todo lo que entra y sale cuenta como tokens, y el plan tiene una cuota de uso.</dd>
+      </dl>
+
+      <div class="letra">V</div>
+      <dl>
+        <dt>Versión (MAYOR.MENOR) <span class="src">Skills de PFF</span></dt>
+        <dd>Numeración que indica qué tan reciente es una skill. El número MENOR sube por ajustes y reglas nuevas; el MAYOR, por cambios de fondo (nueva plantilla o cambio estructural).</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var input=document.getElementById('search');
+  var count=document.getElementById('scount');
+  var root=document.getElementById('contenido');
+  if(!input||!root) return;
+  var fold=(function(){
+    var map={'á':'a','à':'a','ä':'a','â':'a','é':'e','è':'e','ë':'e','ê':'e',
+      'í':'i','ì':'i','ï':'i','î':'i','ó':'o','ò':'o','ö':'o','ô':'o',
+      'ú':'u','ù':'u','ü':'u','û':'u','ñ':'n','ç':'c'};
+    return function(s){s=s.toLowerCase();var o='';for(var i=0;i<s.length;i++){var c=s[i];o+=map[c]||c;}return o;};
+  })();
+  var marks=[], cur=-1;
+  function clearMarks(){root.querySelectorAll('mark.hit').forEach(function(m){m.parentNode.replaceChild(document.createTextNode(m.textContent),m);});root.normalize();marks=[];cur=-1;}
+  function textNodes(el){var out=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+    if(!n.nodeValue.trim())return NodeFilter.FILTER_REJECT;var p=n.parentNode.nodeName.toLowerCase();
+    if(p==='script'||p==='style'||p==='mark')return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT;}});
+    var n;while((n=w.nextNode()))out.push(n);return out;}
+  function run(){
+    clearMarks();var q=input.value.trim();if(q.length<2){count.textContent='';return;}var qf=fold(q);
+    textNodes(root).forEach(function(node){var text=node.nodeValue,tf=fold(text),idx=0,hits=[];
+      while((idx=tf.indexOf(qf,idx))!==-1){hits.push(idx);idx+=qf.length;}if(!hits.length)return;
+      var frag=document.createDocumentFragment(),last=0;
+      hits.forEach(function(h){if(h>last)frag.appendChild(document.createTextNode(text.slice(last,h)));
+        var m=document.createElement('mark');m.className='hit';m.textContent=text.slice(h,h+q.length);frag.appendChild(m);last=h+q.length;});
+      if(last<text.length)frag.appendChild(document.createTextNode(text.slice(last)));node.parentNode.replaceChild(frag,node);});
+    marks=Array.prototype.slice.call(root.querySelectorAll('mark.hit'));
+    count.textContent=marks.length?marks.length+' coincidencia'+(marks.length>1?'s':''):'sin coincidencias';
+    if(marks.length){cur=0;focusCur();}
+  }
+  function focusCur(){marks.forEach(function(m){m.classList.remove('cur');});
+    if(cur>=0&&marks[cur]){marks[cur].classList.add('cur');if(marks[cur].scrollIntoView)marks[cur].scrollIntoView({block:'center',behavior:'smooth'});}}
+  input.addEventListener('input',run);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter'&&marks.length){e.preventDefault();cur=(cur+(e.shiftKey?-1:1)+marks.length)%marks.length;focusCur();}});
+})();
+</script>
+<script>
+(function(){
+  var toc=document.getElementById('toc');
+  var root=document.getElementById('contenido');
+  if(!toc||!root) return;
+  var ul=document.createElement('ul');
+  var head=document.createElement('div'); head.className='toch'; head.textContent='En esta página';
+  toc.appendChild(head); toc.appendChild(ul);
+  var i=0, items=0;
+  Array.prototype.forEach.call(root.children,function(el){
+    if(el.classList && el.classList.contains('grouptitle')){
+      var g=document.createElement('li'); g.className='tocgroup'; g.textContent=el.textContent.trim(); ul.appendChild(g); return;
+    }
+    if(el.tagName && el.tagName.toLowerCase()==='details'){
+      var sum=el.querySelector('summary'); if(!sum) return;
+      var txt=sum.textContent.replace(/›/g,'').trim();
+      if(!el.id) el.id='sec-'+(i++);
+      var li=document.createElement('li');
+      var a=document.createElement('a'); a.href='#'+el.id; a.textContent=txt;
+      a.addEventListener('click',function(ev){ev.preventDefault(); el.open=true;
+        if(el.scrollIntoView) el.scrollIntoView({block:'start',behavior:'smooth'});});
+      li.appendChild(a); ul.appendChild(li); items++;
+    }
+  });
+  if(items===0){
+    head.textContent='Ir a la letra';
+    Array.prototype.forEach.call(root.querySelectorAll('.letra'),function(el){
+      if(!el.id) el.id='letra-'+el.textContent.trim();
+      var li=document.createElement('li');
+      var a=document.createElement('a'); a.href='#'+el.id; a.textContent=el.textContent.trim();
+      a.addEventListener('click',function(ev){ev.preventDefault(); if(el.scrollIntoView) el.scrollIntoView({block:'start',behavior:'smooth'});});
+      li.appendChild(a); ul.appendChild(li);
+    });
+  }
+})();
+</script>
+</body>
+</html>

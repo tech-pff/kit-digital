@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introducción a Claude · PFF</title>
+<style>
+  :root{
+    --azul:#13315c; --azul2:#1d4e89; --acento:#2a9d8f; --acento2:#e9c46a;
+    --bg:#f5f7fa; --card:#ffffff; --texto:#1f2937; --suave:#5b6470; --linea:#e3e8ef;
+    --en:#0b6e6e; --enbg:#e6f4f1; --aviso:#fff7e6; --avisob:#e0a800;
+    --si:#eaf7ef; --sib:#1e8449; --no:#fdecec; --nob:#c0392b;
+    --sombra:0 1px 3px rgba(16,38,73,.08),0 6px 20px rgba(16,38,73,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:transparent}
+  body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--texto);line-height:1.6;font-size:16px}
+  .widget{height:100%;overflow-y:auto;max-width:920px;margin:0 auto;padding:2px 14px 22px}
+  a{color:var(--azul2)}
+  .whead{background:linear-gradient(135deg,var(--azul),var(--azul2));color:#fff;border-radius:14px;padding:16px 20px;margin:6px 0 14px}
+  .whead h1{margin:0;font-size:21px;letter-spacing:.2px}
+  .whead .sub{font-size:13.5px;opacity:.9;margin-top:2px}
+  .searchbar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:blur(3px);padding:8px 0 10px;margin-bottom:8px}
+  .search{width:100%;padding:11px 96px 11px 14px;border:1px solid var(--linea);border-radius:10px;font-size:14.5px;background:#fff}
+  .search:focus{outline:none;border-color:var(--acento);box-shadow:0 0 0 3px rgba(42,157,143,.15)}
+  .scount{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12.5px;color:var(--suave);pointer-events:none}
+  mark.hit{background:var(--acento2);color:#3a2f00;border-radius:3px;padding:0 1px}
+  mark.hit.cur{background:#f4a261;box-shadow:0 0 0 2px rgba(244,162,97,.5)}
+  .grouptitle{font-size:16px;font-weight:800;color:var(--azul);letter-spacing:.02em;margin:24px 4px 10px;padding-bottom:6px;border-bottom:2px solid var(--acento)}
+  details.sec{background:var(--card);border:1px solid var(--linea);border-radius:14px;margin-bottom:14px;box-shadow:var(--sombra);overflow:hidden}
+  details.sec>summary{list-style:none;cursor:pointer;padding:15px 20px;font-size:17px;font-weight:700;color:var(--azul);display:flex;align-items:flex-start;gap:10px;user-select:none}
+  details.sec>summary::-webkit-details-marker{display:none}
+  details.sec>summary .num{background:var(--azul);color:#fff;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 auto}
+  details.sec>summary .chev{margin-left:auto;transition:transform .2s;color:var(--suave);font-size:20px}
+  details.sec[open]>summary .chev{transform:rotate(90deg)}
+  details.sec[open]>summary{border-bottom:1px solid var(--linea)}
+  .body{padding:8px 22px 20px}
+  h3{color:var(--azul2);font-size:15.5px;margin:16px 0 6px}
+  p{margin:.5em 0} ul,ol{margin:.4em 0 .6em;padding-left:22px} li{margin:.3em 0}
+  .lead{background:var(--card);border:1px solid var(--linea);border-left:4px solid var(--acento);border-radius:12px;padding:14px 18px;box-shadow:var(--sombra);margin-bottom:16px;font-size:14.5px}
+  .lead p{margin:.4em 0}
+  .en{background:var(--enbg);color:var(--en);border:1px solid #bfe3dd;border-radius:6px;padding:1px 7px;font-weight:700;font-size:.9em;white-space:nowrap}
+  .tip{background:var(--enbg);border:1px solid #bfe3dd;border-left:4px solid var(--acento);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+  .warn{background:var(--aviso);border:1px solid #f0d999;border-left:4px solid var(--avisob);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+  .nota{background:#fbfaf5;border:1px dashed var(--avisob);border-radius:12px;padding:12px 16px;margin:12px 0;color:#7a6320;font-size:14px}
+  .nota b{color:#6b5512}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+  .box{border:1px solid var(--linea);border-radius:12px;padding:14px 16px;background:#fcfdfe}
+  .box h4{margin:0 0 6px;color:var(--azul)}
+  .pro,.con{border-radius:12px;padding:14px 16px}
+  .pro{background:var(--si);border:1px solid #bfe4cd} .pro h4{color:var(--sib);margin:0 0 6px}
+  .con{background:var(--no);border:1px solid #f1c7c2} .con h4{color:var(--nob);margin:0 0 6px}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+  th,td{border:1px solid var(--linea);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--azul);color:#fff;font-weight:600}
+  tr:nth-child(even) td{background:#fafbfc}
+  .tag{display:inline-block;background:#eef1f6;border:1px solid var(--linea);border-radius:20px;padding:2px 11px;font-size:13px;margin:2px 3px 2px 0;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .pasos{background:#fcfdfe;border:1px solid var(--linea);border-radius:10px;padding:12px 18px;margin:10px 0}
+  .pasos h4{margin:2px 0 6px;color:var(--azul)}
+  .path{display:inline-block;background:#eef2f8;border:1px solid #d7e0ee;border-radius:8px;padding:3px 10px;font-size:13px;color:var(--azul);font-family:ui-monospace,Menlo,Consolas,monospace;margin:2px 0}
+  .path b{color:var(--acento);font-weight:700;padding:0 3px}
+  .rec{background:#f4faf8;border:1px solid #cceae3;border-radius:10px;padding:10px 16px;margin:10px 0}
+  .rec h4{margin:2px 0 6px;color:var(--sib)}
+  .fname{display:inline-block;background:#0f1b2d;color:#e8eef7;border-radius:8px;padding:2px 10px;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .prompt{background:#0f1b2d;color:#e8eef7;border-radius:10px;padding:12px 14px;margin:6px 0 4px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap}
+  .ptitle{font-weight:700;color:var(--azul2);margin:16px 0 4px;font-size:14.5px}
+  .hint{font-size:12.5px;color:var(--suave);margin:2px 0 10px}
+  .causa{font-size:14.5px} .causa b{color:var(--nob)}
+  .sol{background:var(--si);border:1px solid #bfe4cd;border-left:4px solid var(--sib);border-radius:10px;padding:10px 14px;margin:8px 0 0;font-size:14.5px}
+  .sol b{color:var(--sib)}
+  code{background:#eef1f6;border:1px solid var(--linea);border-radius:5px;padding:0 5px;font-size:.9em}
+  .btns{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--azul2);color:#fff;text-decoration:none;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px}
+  .btn.green{background:var(--acento)}
+  @media(max-width:640px){ .grid2{grid-template-columns:1fr} table{font-size:13.5px} }
+
+  .toc{background:var(--card);border:1px solid var(--linea);border-radius:12px;box-shadow:var(--sombra);padding:10px 14px;margin:0 0 16px}
+  .toc .toch{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--suave);margin:0 0 8px;font-weight:700}
+  .toc ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .toc li{margin:0}
+  .toc a{display:inline-block;text-decoration:none;color:var(--azul);background:#eef2f8;border:1px solid #d7e0ee;border-radius:20px;padding:4px 11px;font-size:13px}
+  .toc a:hover{background:var(--acento);color:#fff;border-color:var(--acento)}
+  .toc .tocgroup{width:100%;font-size:11px;font-weight:800;color:var(--acento);text-transform:uppercase;letter-spacing:.05em;margin:8px 0 0}
+  details.sec{scroll-margin-top:66px}
+  .letra{scroll-margin-top:66px}
+
+.sitenav{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:rgba(255,255,255,.96);backdrop-filter:blur(3px);border-bottom:1px solid var(--linea);padding:10px 4px;margin-bottom:8px}
+.sitenav a{color:var(--azul2);text-decoration:none;font-size:14px;font-weight:600}
+.sitenav a:hover{text-decoration:underline}
+.sitenav .sitenav-home{color:var(--azul);font-weight:700}
+.sitenav a.active{color:var(--acento)}
+.sitenav-sub{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin:2px 0 12px;padding:0 2px}
+.sitenav-sub a{color:var(--suave);text-decoration:none;font-weight:600}
+.sitenav-sub a.active{color:var(--acento)}
+.sitenav-sub a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="widget">
+  <nav class="sitenav">
+    <a class="sitenav-home" href="../index.html">← Kit Digital</a>
+    <a href="gqueues.html">GQueues</a>
+    <a class="active" href="guia-claude-01-introduccion.html">Guía de Claude</a>
+    <a href="feedback.html">Feedback</a>
+  </nav>
+  <div class="sitenav-sub">
+    <a class="active" href="guia-claude-01-introduccion.html">1. Introducción</a>
+    <a href="guia-claude-02-cowork-y-buenas-practicas.html">2. Cowork y buenas prácticas</a>
+    <a href="guia-claude-03-skills-pff.html">3. Skills de PFF</a>
+    <a href="guia-claude-04-glosario.html">4. Glosario</a>
+  </div>
+  <div class="whead">
+    <h1>Introducción a Claude</h1>
+    <div class="sub">Claude para PFF · Guía práctica del despacho</div>
+  </div>
+  <div class="searchbar">
+    <input class="search" id="search" type="search" placeholder="Buscar en esta página…" autocomplete="off">
+    <span class="scount" id="scount"></span>
+  </div>
+  <nav class="toc" id="toc" aria-label="Indice de la pagina"></nav>
+  <div id="contenido">
+<details class="sec" open>
+      <summary>¿Qué es Claude? <span class="chev">›</span></summary>
+      <div class="body">
+        <p><b>Claude</b> es un asistente de inteligencia artificial. Le escribes lo que necesitas —en lenguaje natural, como le hablarías a un colega— y te responde: redacta, resume, explica, analiza documentos, organiza información, hace cálculos y más.</p>
+
+        <h3>Las dos formas de usar Claude en PFF</h3>
+        <div class="grid2">
+          <div class="box">
+            <h4>Claude Regular (claude.ai)</h4>
+            <p>El chat de siempre, en web, móvil o escritorio. Tú escribes, Claude responde, por turnos. Ideal para consultas rápidas, redacción y analizar un documento que tú le pegas o subes.</p>
+          </div>
+          <div class="box">
+            <h4>Cowork</h4>
+            <p>Modo "agente" dentro de la app de escritorio. Claude ejecuta tareas de varios pasos por su cuenta, con acceso real a tus archivos. Para trabajo más pesado y entregables completos.</p>
+          </div>
+        </div>
+
+        <div class="tip"><b>Tip.</b> Regla mental rápida: si es una pregunta o un texto que cabe en el chat, usa <b>Claude Regular</b>. Si necesitas que trabaje sobre varios archivos o genere documentos terminados, usa <b>Cowork</b>.</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Modelos de Claude y cuál usar <span class="chev">›</span></summary>
+      <div class="body">
+        <p>En el selector de modelo eliges con qué versión de Claude trabajar. Las disponibles pueden variar según el plan; a grandes rasgos:</p>
+        <table>
+          <tr><th>Modelo</th><th>Para qué es mejor</th></tr>
+          <tr><td><b>Claude Opus 4.8</b></td><td>El más potente para trabajo complejo: razonamiento profundo, análisis difícil y tareas largas de varios pasos. Buen punto de partida cuando la tarea es exigente.</td></tr>
+          <tr><td><b>Claude Sonnet 5</b></td><td>El mejor equilibrio entre velocidad e inteligencia. Ideal para el día a día: redacción, resúmenes y análisis. Suele ser el predeterminado.</td></tr>
+          <tr><td><b>Claude Haiku 4.5</b></td><td>El más rápido. Para tareas simples y de alto volumen donde importa la rapidez más que la profundidad.</td></tr>
+          <tr><td><b>Claude Fable 5</b></td><td>Inteligencia de nueva generación para agentes de tareas largas; la mayor capacidad disponible. Para lo más complejo o de mayor alcance.</td></tr>
+        </table>
+        <div class="tip"><b>Tip.</b> Si no sabes cuál elegir: <b>Sonnet</b> para la mayoría del trabajo diario, <b>Opus</b> cuando la tarea es compleja o delicada, y <b>Haiku</b> para algo rápido y sencillo.</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Agente vs. chatbot <span class="chev">›</span></summary>
+      <div class="body">
+        <p>Dos formas muy distintas de trabajar con Claude:</p>
+        <div class="grid2">
+          <div class="box"><h4>Chatbot (Claude Regular)</h4><p>Funciona por turnos: tú preguntas, Claude responde, tú sigues. No hace nada por su cuenta; cada paso lo diriges tú. Ideal para consultar, redactar y revisar.</p></div>
+          <div class="box"><h4>Agente (Cowork)</h4><p>Le das un objetivo y trabaja solo: decide los pasos, usa herramientas, lee y escribe archivos, y avanza hasta terminar sin que lo guíes uno por uno. Ideal para tareas de varios pasos.</p></div>
+        </div>
+        <div class="tip"><b>Tip.</b> Chatbot = conversación paso a paso. Agente = le encargas y ejecuta. Cowork es el modo agente; se explica a fondo en la página <b>Skills, tokens, Cowork y buenas prácticas</b>.</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>¿Qué es una máquina virtual (VM)? <span class="chev">›</span></summary>
+      <div class="body">
+        <p>Una <b>máquina virtual</b> (VM) es una computadora simulada por software que corre <b>aislada</b> dentro de otra: una "computadora dentro de tu computadora", con su propio espacio y sin tocar lo demás.</p>
+        <p>Cuando Claude ejecuta código o crea archivos, lo hace en una VM (un entorno aislado o <i>sandbox</i>). Ventajas:</p>
+        <ul>
+          <li><b>Seguridad:</b> lo que ocurre ahí queda contenido; no afecta tu equipo ni tus archivos salvo lo que tú apruebes.</li>
+          <li><b>Control:</b> el acceso a internet de esa VM depende de la configuración (ver "Ejecución de código y creación de archivos").</li>
+        </ul>
+        <div class="tip"><b>Tip.</b> Por eso Claude puede "correr código" con seguridad: trabaja en un espacio separado, no directo sobre tu computadora.</div>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Términos importantes <span class="chev">›</span></summary>
+      <div class="body">
+        <p>Un mínimo de vocabulario para moverte con soltura. La lista completa está en la página <b>Glosario</b>.</p>
+        <dl class="glos">
+          <dt>Prompt</dt>
+          <dd>La instrucción o pregunta que le escribes a Claude. Mientras más claro el prompt, mejor la respuesta.</dd>
+          <dt>Proyecto <span class="en">Project</span></dt>
+          <dd>Un espacio que agrupa chats, archivos e instrucciones sobre un mismo tema o cliente. El contexto se reutiliza entre chats del proyecto.</dd>
+          <dt>Token</dt>
+          <dd>La unidad con la que Claude "mide" el texto (un token ≈ ¾ de palabra). Importa para entender el consumo.</dd>
+          <dt>Skill (habilidad)</dt>
+          <dd>Una capacidad especializada que Claude carga cuando la tarea lo pide (p. ej. crear un Word o un Excel).</dd>
+          <dt>Conector / MCP</dt>
+          <dd>Una conexión a una herramienta externa (Gmail, Google Drive, Calendar, Zoom) para que Claude consulte o actúe ahí.</dd>
+        </dl>
+      </div>
+    </details>
+
+    <div class="grouptitle">Configuración de Claude</div>
+
+<details class="sec" open>
+      <summary>Instrucciones y contexto <span class="chev">›</span></summary>
+      <div class="body">
+        <h3>Instrucciones para Claude</h3>
+        <p class="path">Configuración <b>›</b> General <b>›</b> Instrucciones para Claude</p>
+        <p>Un texto fijo que tú escribes y que Claude toma en cuenta en <b>todos</b> tus chats y sesiones de Cowork (siempre dentro de las <a href="https://www.anthropic.com/legal/aup" target="_blank" rel="noopener">directrices de uso de Anthropic</a>). Es el lugar para lo que Claude siempre debería saber de ti, sin que lo repitas cada vez. Por ejemplo:</p>
+        <ul>
+          <li><b>Reglas fijas:</b> p. ej. "nunca subir documentos a Drive sin permiso".</li>
+          <li><b>Preferencias de redacción:</b> tono, idioma, nivel de detalle, formato preferido.</li>
+          <li><b>Contexto profesional:</b> tu puesto, área, formación y las tareas que haces con frecuencia.</li>
+          <li><b>Contexto del despacho:</b> qué es PFF, a qué se dedica y cómo trabajan.</li>
+        </ul>
+
+        <h3>Instrucciones globales de Cowork</h3>
+        <p class="path">Configuración <b>›</b> Cowork <b>›</b> Instrucciones globales</p>
+        <p>Equivalente a lo anterior pero <b>solo para Cowork</b>: se aplican a todas tus sesiones del modo agente. Úsalas para convenciones y preferencias que Claude siempre deba respetar al trabajar con tus archivos (nombres de versiones, dónde guardar borradores, etc.).</p>
+        <div class="tip"><b>Tip.</b> Cómo se relaciona todo esto —perfil, proyecto y memoria— se explica en la página <b>Skills, tokens, Cowork y buenas prácticas</b>, en "Cómo persiste el contexto".</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Uso: Sesión actual vs. Límites <span class="chev">›</span></summary>
+      <div class="body">
+        <p class="path">Configuración <b>›</b> Uso</p>
+        <p>Dos medidores que responden preguntas distintas:</p>
+        <table>
+          <tr><th>Medidor</th><th>Qué mide</th><th>Para qué te sirve</th></tr>
+          <tr><td><b>Sesión actual</b></td><td>El consumo de la ventana de tiempo en curso, que se reinicia periódicamente.</td><td>Saber cuánto te queda <b>ahora mismo</b> antes de tener que esperar al reinicio.</td></tr>
+          <tr><td><b>Límites</b></td><td>Los topes de tu plan en un periodo más amplio (p. ej. semanal).</td><td>Ver el panorama general y dosificar el uso a lo largo del periodo.</td></tr>
+        </table>
+        <p>En corto: <b>Sesión actual</b> es el tanque inmediato; <b>Límites</b> es el presupuesto del periodo completo.</p>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Carpetas de Cowork de confianza <span class="chev">›</span></summary>
+      <div class="body">
+        <p class="path">Configuración <b>›</b> Carpetas de Cowork de confianza</p>
+        <p>Una lista de carpetas que marcas como seguras. Al adjuntar una de ellas a una tarea de Cowork, Claude trabaja sin pedirte confirmación en cada paso, lo que agiliza tareas repetitivas.</p>
+        <div class="warn"><b>Importante.</b> Marca como de confianza solo carpetas cuyo contenido conoces y controlas. Para carpetas con documentos delicados de clientes, conviene <b>no</b> marcarlas y mantener la confirmación manual.</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Extensiones, habilidades, conectores y plugins <span class="chev">›</span></summary>
+      <div class="body">
+        <p>Cuatro cosas que se parecen pero no son lo mismo. La diferencia clave: <b>extensiones</b> conectan con tu <b>computadora</b>; <b>conectores</b> conectan con <b>servicios en la nube</b>; <b>habilidades</b> son conocimiento que Claude aplica; y <b>plugins</b> son paquetes que agrupan lo anterior.</p>
+        <table>
+          <tr><th>Término</th><th>Qué es</th><th>Ejemplo</th></tr>
+          <tr><td><b>Extensión</b></td><td>Deja que Claude use apps, datos y herramientas <b>en tu computadora</b> (archivos locales, Office, PDFs).</td><td>Leer una carpeta local; editar un Word</td></tr>
+          <tr><td><b>Habilidad (Skill)</b></td><td>Un instructivo empaquetado que Claude carga para cierto tipo de tarea. Puede venir incluido o crearlo tú.</td><td>Dar formato a un escrito del despacho</td></tr>
+          <tr><td><b>Conector</b></td><td>Una conexión a un <b>servicio externo en la nube</b> para consultar o actuar ahí.</td><td>Buscar en Gmail o Google Drive</td></tr>
+          <tr><td><b>Plugin</b></td><td>Un paquete que <b>agrupa</b> habilidades, conectores y herramientas, propio o de terceros.</td><td>Paquete de Dropbox</td></tr>
+        </table>
+
+        <h3>Extensiones</h3>
+        <p class="path">Configuración <b>›</b> Extensiones</p>
+        <p>Aquí habilitas el acceso de Claude a tu computadora. Recomendadas para el despacho:</p>
+        <div class="rec">
+          <h4>Instalar</h4>
+          <p>
+            <span class="tag">Filesystem</span>
+            <span class="tag">PowerPoint (By Anthropic)</span>
+            <span class="tag">Word (By Anthropic)</span>
+            <span class="tag">pdf-viewer</span>
+            <span class="tag">PDF Tools — Fill, Sign, Merge, Split, Extract</span>
+          </p>
+        </div>
+
+        <h3>Habilidades / Skills</h3>
+        <p class="path">Configuración <b>›</b> Habilidades</p>
+        <p>El panel donde viven las skills, incluidas las que ha creado Ana para PFF. Qué es cada una, cómo se usa y cómo se mantiene está en la página <b>Skills de PFF</b>.</p>
+
+        <h3>Conectores</h3>
+        <p class="path">Configuración <b>›</b> Conectores</p>
+        <p>Donde enlazas Claude con servicios externos (Gmail, Google Drive, Calendar, Zoom, Microsoft 365). Una vez conectados, Claude puede consultar esas fuentes para responder sin que adjuntes los archivos a mano.</p>
+
+        <h3>Plugins</h3>
+        <p class="path">Configuración <b>›</b> Plugins</p>
+        <p>Paquetes que agrupan skills y conectores, tanto locales como de terceros. Recomendado instalar el plugin de <b>Dropbox</b>.</p>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>¿Y Claude para Excel? <span class="chev">›</span></summary>
+      <div class="body">
+        <p>No hay una extensión "Excel (By Anthropic)" como las de Word y PowerPoint, y no hace falta: crear y editar <b>.xlsx</b> ya viene incluido en la capacidad general de creación de archivos.</p>
+        <p class="path">Configuración <b>›</b> Capacidades <b>›</b> Ejecución de código y creación de archivos</p>
+        <p>Con esa opción activada, Claude genera hojas de Excel con fórmulas, tablas y gráficas directamente en cualquier chat o en Cowork (es la skill <span class="tag">xlsx</span>). En la mayoría de los planes viene activada por defecto.</p>
+        <div class="tip"><b>Tip.</b> Aparte de esto existe <b>Claude para Excel</b>, un complemento que vive <b>dentro</b> de Microsoft Excel (barra lateral), en vista previa y en planes de pago. Ese se instala como add-in desde Excel, no desde el panel de Extensiones de Cowork. Si te interesa, conviene confirmar disponibilidad para el plan de PFF en el soporte de Anthropic.</div>
+      </div>
+    </details>
+  </div>
+</div>
+<script>
+(function(){
+  var input=document.getElementById('search');
+  var count=document.getElementById('scount');
+  var root=document.getElementById('contenido');
+  if(!input||!root) return;
+  var fold=(function(){
+    var map={'á':'a','à':'a','ä':'a','â':'a','é':'e','è':'e','ë':'e','ê':'e',
+      'í':'i','ì':'i','ï':'i','î':'i','ó':'o','ò':'o','ö':'o','ô':'o',
+      'ú':'u','ù':'u','ü':'u','û':'u','ñ':'n','ç':'c'};
+    return function(s){s=s.toLowerCase();var o='';for(var i=0;i<s.length;i++){var c=s[i];o+=map[c]||c;}return o;};
+  })();
+  var marks=[], cur=-1;
+  function clearMarks(){root.querySelectorAll('mark.hit').forEach(function(m){m.parentNode.replaceChild(document.createTextNode(m.textContent),m);});root.normalize();marks=[];cur=-1;}
+  function textNodes(el){var out=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+    if(!n.nodeValue.trim())return NodeFilter.FILTER_REJECT;var p=n.parentNode.nodeName.toLowerCase();
+    if(p==='script'||p==='style'||p==='mark')return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT;}});
+    var n;while((n=w.nextNode()))out.push(n);return out;}
+  function openAncestors(m){var p=m.parentNode;while(p&&p!==root){if(p.tagName&&p.tagName.toLowerCase()==='details')p.open=true;p=p.parentNode;}}
+  function run(){
+    clearMarks();var q=input.value.trim();if(q.length<2){count.textContent='';return;}var qf=fold(q);
+    textNodes(root).forEach(function(node){var text=node.nodeValue,tf=fold(text),idx=0,hits=[];
+      while((idx=tf.indexOf(qf,idx))!==-1){hits.push(idx);idx+=qf.length;}if(!hits.length)return;
+      var frag=document.createDocumentFragment(),last=0;
+      hits.forEach(function(h){if(h>last)frag.appendChild(document.createTextNode(text.slice(last,h)));
+        var m=document.createElement('mark');m.className='hit';m.textContent=text.slice(h,h+q.length);frag.appendChild(m);last=h+q.length;});
+      if(last<text.length)frag.appendChild(document.createTextNode(text.slice(last)));node.parentNode.replaceChild(frag,node);});
+    marks=Array.prototype.slice.call(root.querySelectorAll('mark.hit'));marks.forEach(openAncestors);
+    count.textContent=marks.length?marks.length+' coincidencia'+(marks.length>1?'s':''):'sin coincidencias';
+    if(marks.length){cur=0;focusCur();}
+  }
+  function focusCur(){marks.forEach(function(m){m.classList.remove('cur');});
+    if(cur>=0&&marks[cur]){marks[cur].classList.add('cur');if(marks[cur].scrollIntoView)marks[cur].scrollIntoView({block:'center',behavior:'smooth'});}}
+  input.addEventListener('input',run);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter'&&marks.length){e.preventDefault();cur=(cur+(e.shiftKey?-1:1)+marks.length)%marks.length;focusCur();}});
+})();
+</script>
+<script>
+(function(){
+  var toc=document.getElementById('toc');
+  var root=document.getElementById('contenido');
+  if(!toc||!root) return;
+  var ul=document.createElement('ul');
+  var head=document.createElement('div'); head.className='toch'; head.textContent='En esta página';
+  toc.appendChild(head); toc.appendChild(ul);
+  var i=0, items=0;
+  Array.prototype.forEach.call(root.children,function(el){
+    if(el.classList && el.classList.contains('grouptitle')){
+      var g=document.createElement('li'); g.className='tocgroup'; g.textContent=el.textContent.trim(); ul.appendChild(g); return;
+    }
+    if(el.tagName && el.tagName.toLowerCase()==='details'){
+      var sum=el.querySelector('summary'); if(!sum) return;
+      var txt=sum.textContent.replace(/›/g,'').trim();
+      if(!el.id) el.id='sec-'+(i++);
+      var li=document.createElement('li');
+      var a=document.createElement('a'); a.href='#'+el.id; a.textContent=txt;
+      a.addEventListener('click',function(ev){ev.preventDefault(); el.open=true;
+        if(el.scrollIntoView) el.scrollIntoView({block:'start',behavior:'smooth'});});
+      li.appendChild(a); ul.appendChild(li); items++;
+    }
+  });
+  if(items===0){
+    head.textContent='Ir a la letra';
+    Array.prototype.forEach.call(root.querySelectorAll('.letra'),function(el){
+      if(!el.id) el.id='letra-'+el.textContent.trim();
+      var li=document.createElement('li');
+      var a=document.createElement('a'); a.href='#'+el.id; a.textContent=el.textContent.trim();
+      a.addEventListener('click',function(ev){ev.preventDefault(); if(el.scrollIntoView) el.scrollIntoView({block:'start',behavior:'smooth'});});
+      li.appendChild(a); ul.appendChild(li);
+    });
+  }
+})();
+</script>
+</body>
+</html>

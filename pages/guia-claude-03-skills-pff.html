@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills de PFF, prompts y soluciones · PFF</title>
+<style>
+  :root{
+    --azul:#13315c; --azul2:#1d4e89; --acento:#2a9d8f; --acento2:#e9c46a;
+    --bg:#f5f7fa; --card:#ffffff; --texto:#1f2937; --suave:#5b6470; --linea:#e3e8ef;
+    --en:#0b6e6e; --enbg:#e6f4f1; --aviso:#fff7e6; --avisob:#e0a800;
+    --si:#eaf7ef; --sib:#1e8449; --no:#fdecec; --nob:#c0392b;
+    --sombra:0 1px 3px rgba(16,38,73,.08),0 6px 20px rgba(16,38,73,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:transparent}
+  body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--texto);line-height:1.6;font-size:16px}
+  .widget{height:100%;overflow-y:auto;max-width:920px;margin:0 auto;padding:2px 14px 22px}
+  a{color:var(--azul2)}
+  .whead{background:linear-gradient(135deg,var(--azul),var(--azul2));color:#fff;border-radius:14px;padding:16px 20px;margin:6px 0 14px}
+  .whead h1{margin:0;font-size:21px;letter-spacing:.2px}
+  .whead .sub{font-size:13.5px;opacity:.9;margin-top:2px}
+  .searchbar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:blur(3px);padding:8px 0 10px;margin-bottom:8px}
+  .search{width:100%;padding:11px 96px 11px 14px;border:1px solid var(--linea);border-radius:10px;font-size:14.5px;background:#fff}
+  .search:focus{outline:none;border-color:var(--acento);box-shadow:0 0 0 3px rgba(42,157,143,.15)}
+  .scount{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12.5px;color:var(--suave);pointer-events:none}
+  mark.hit{background:var(--acento2);color:#3a2f00;border-radius:3px;padding:0 1px}
+  mark.hit.cur{background:#f4a261;box-shadow:0 0 0 2px rgba(244,162,97,.5)}
+  .grouptitle{font-size:16px;font-weight:800;color:var(--azul);letter-spacing:.02em;margin:24px 4px 10px;padding-bottom:6px;border-bottom:2px solid var(--acento)}
+  details.sec{background:var(--card);border:1px solid var(--linea);border-radius:14px;margin-bottom:14px;box-shadow:var(--sombra);overflow:hidden}
+  details.sec>summary{list-style:none;cursor:pointer;padding:15px 20px;font-size:17px;font-weight:700;color:var(--azul);display:flex;align-items:flex-start;gap:10px;user-select:none}
+  details.sec>summary::-webkit-details-marker{display:none}
+  details.sec>summary .num{background:var(--azul);color:#fff;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 auto}
+  details.sec>summary .chev{margin-left:auto;transition:transform .2s;color:var(--suave);font-size:20px}
+  details.sec[open]>summary .chev{transform:rotate(90deg)}
+  details.sec[open]>summary{border-bottom:1px solid var(--linea)}
+  .body{padding:8px 22px 20px}
+  h3{color:var(--azul2);font-size:15.5px;margin:16px 0 6px}
+  p{margin:.5em 0} ul,ol{margin:.4em 0 .6em;padding-left:22px} li{margin:.3em 0}
+  .lead{background:var(--card);border:1px solid var(--linea);border-left:4px solid var(--acento);border-radius:12px;padding:14px 18px;box-shadow:var(--sombra);margin-bottom:16px;font-size:14.5px}
+  .lead p{margin:.4em 0}
+  .en{background:var(--enbg);color:var(--en);border:1px solid #bfe3dd;border-radius:6px;padding:1px 7px;font-weight:700;font-size:.9em;white-space:nowrap}
+  .tip{background:var(--enbg);border:1px solid #bfe3dd;border-left:4px solid var(--acento);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+  .warn{background:var(--aviso);border:1px solid #f0d999;border-left:4px solid var(--avisob);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+  .nota{background:#fbfaf5;border:1px dashed var(--avisob);border-radius:12px;padding:12px 16px;margin:12px 0;color:#7a6320;font-size:14px}
+  .nota b{color:#6b5512}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+  .box{border:1px solid var(--linea);border-radius:12px;padding:14px 16px;background:#fcfdfe}
+  .box h4{margin:0 0 6px;color:var(--azul)}
+  .pro,.con{border-radius:12px;padding:14px 16px}
+  .pro{background:var(--si);border:1px solid #bfe4cd} .pro h4{color:var(--sib);margin:0 0 6px}
+  .con{background:var(--no);border:1px solid #f1c7c2} .con h4{color:var(--nob);margin:0 0 6px}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+  th,td{border:1px solid var(--linea);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--azul);color:#fff;font-weight:600}
+  tr:nth-child(even) td{background:#fafbfc}
+  .tag{display:inline-block;background:#eef1f6;border:1px solid var(--linea);border-radius:20px;padding:2px 11px;font-size:13px;margin:2px 3px 2px 0;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .pasos{background:#fcfdfe;border:1px solid var(--linea);border-radius:10px;padding:12px 18px;margin:10px 0}
+  .pasos h4{margin:2px 0 6px;color:var(--azul)}
+  .path{display:inline-block;background:#eef2f8;border:1px solid #d7e0ee;border-radius:8px;padding:3px 10px;font-size:13px;color:var(--azul);font-family:ui-monospace,Menlo,Consolas,monospace;margin:2px 0}
+  .path b{color:var(--acento);font-weight:700;padding:0 3px}
+  .rec{background:#f4faf8;border:1px solid #cceae3;border-radius:10px;padding:10px 16px;margin:10px 0}
+  .rec h4{margin:2px 0 6px;color:var(--sib)}
+  .fname{display:inline-block;background:#0f1b2d;color:#e8eef7;border-radius:8px;padding:2px 10px;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .prompt{background:#0f1b2d;color:#e8eef7;border-radius:10px;padding:12px 14px;margin:6px 0 4px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap}
+  .ptitle{font-weight:700;color:var(--azul2);margin:16px 0 4px;font-size:14.5px}
+  .hint{font-size:12.5px;color:var(--suave);margin:2px 0 10px}
+  .causa{font-size:14.5px} .causa b{color:var(--nob)}
+  .sol{background:var(--si);border:1px solid #bfe4cd;border-left:4px solid var(--sib);border-radius:10px;padding:10px 14px;margin:8px 0 0;font-size:14.5px}
+  .sol b{color:var(--sib)}
+  code{background:#eef1f6;border:1px solid var(--linea);border-radius:5px;padding:0 5px;font-size:.9em}
+  .btns{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--azul2);color:#fff;text-decoration:none;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px}
+  .btn.green{background:var(--acento)}
+  @media(max-width:640px){ .grid2{grid-template-columns:1fr} table{font-size:13.5px} }
+
+  .toc{background:var(--card);border:1px solid var(--linea);border-radius:12px;box-shadow:var(--sombra);padding:10px 14px;margin:0 0 16px}
+  .toc .toch{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--suave);margin:0 0 8px;font-weight:700}
+  .toc ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .toc li{margin:0}
+  .toc a{display:inline-block;text-decoration:none;color:var(--azul);background:#eef2f8;border:1px solid #d7e0ee;border-radius:20px;padding:4px 11px;font-size:13px}
+  .toc a:hover{background:var(--acento);color:#fff;border-color:var(--acento)}
+  .toc .tocgroup{width:100%;font-size:11px;font-weight:800;color:var(--acento);text-transform:uppercase;letter-spacing:.05em;margin:8px 0 0}
+  details.sec{scroll-margin-top:66px}
+  .letra{scroll-margin-top:66px}
+
+.sitenav{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:rgba(255,255,255,.96);backdrop-filter:blur(3px);border-bottom:1px solid var(--linea);padding:10px 4px;margin-bottom:8px}
+.sitenav a{color:var(--azul2);text-decoration:none;font-size:14px;font-weight:600}
+.sitenav a:hover{text-decoration:underline}
+.sitenav .sitenav-home{color:var(--azul);font-weight:700}
+.sitenav a.active{color:var(--acento)}
+.sitenav-sub{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin:2px 0 12px;padding:0 2px}
+.sitenav-sub a{color:var(--suave);text-decoration:none;font-weight:600}
+.sitenav-sub a.active{color:var(--acento)}
+.sitenav-sub a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="widget">
+  <nav class="sitenav">
+    <a class="sitenav-home" href="../index.html">← Kit Digital</a>
+    <a href="gqueues.html">GQueues</a>
+    <a class="active" href="guia-claude-01-introduccion.html">Guía de Claude</a>
+    <a href="feedback.html">Feedback</a>
+  </nav>
+  <div class="sitenav-sub">
+    <a href="guia-claude-01-introduccion.html">1. Introducción</a>
+    <a href="guia-claude-02-cowork-y-buenas-practicas.html">2. Cowork y buenas prácticas</a>
+    <a class="active" href="guia-claude-03-skills-pff.html">3. Skills de PFF</a>
+    <a href="guia-claude-04-glosario.html">4. Glosario</a>
+  </div>
+  <div class="whead">
+    <h1>Skills de PFF, prompts y soluciones</h1>
+    <div class="sub">Claude para PFF · Guía práctica del despacho</div>
+  </div>
+  <div class="searchbar">
+    <input class="search" id="search" type="search" placeholder="Buscar en esta página…" autocomplete="off">
+    <span class="scount" id="scount"></span>
+  </div>
+  <nav class="toc" id="toc" aria-label="Indice de la pagina"></nav>
+  <div id="contenido">
+<details class="sec" open>
+      <summary>Catálogo de skills <span class="chev">›</span></summary>
+      <div class="body">
+        <p>Lista de skills disponibles y para qué sirve cada una. Iremos ampliándola conforme sumemos skills propias del despacho.</p>
+
+        <h3>Skills de documentos (incluidas)</h3>
+        <table>
+          <tr><th>Skill</th><th>Para qué sirve</th><th>Ejemplo de uso en PFF</th></tr>
+          <tr><td><span class="tag">docx</span></td><td>Crear y editar documentos de Word con formato</td><td>Memos, escritos, cartas, plantillas del despacho</td></tr>
+          <tr><td><span class="tag">xlsx</span></td><td>Hojas de Excel con fórmulas, formato y gráficas</td><td>Papeles de trabajo, conciliaciones, tablas de cálculo</td></tr>
+          <tr><td><span class="tag">pptx</span></td><td>Presentaciones de PowerPoint</td><td>Presentaciones a clientes, capacitaciones internas</td></tr>
+          <tr><td><span class="tag">pdf</span></td><td>Crear, leer, combinar, dividir y llenar PDFs</td><td>Armar expedientes, extraer datos de PDFs del SAT, llenar formatos</td></tr>
+        </table>
+
+        <h3>Skills de apoyo</h3>
+        <table>
+          <tr><th>Skill</th><th>Para qué sirve</th></tr>
+          <tr><td><span class="tag">learn</span></td><td>Explicar conceptos y enseñar temas paso a paso (útil para vocabulario fiscal/legal)</td></tr>
+          <tr><td><span class="tag">schedule</span></td><td>Programar tareas que se ejecutan solas (cada día, cada semana)</td></tr>
+        </table>
+
+        <div class="nota"><b>Nota — skills propias de PFF:</b> aquí documentaremos las skills que creemos para el despacho. Por cada una conviene anotar: nombre, qué hace, cuándo usarla y un ejemplo. (Pendiente de poblar.)</div>
+      </div>
+    </details>
+<details class="sec">
+      <summary>De qué está hecha una skill <span class="chev">›</span></summary>
+      <div class="body">
+        <p>Una skill es una carpeta de archivos comprimida en un solo archivo con terminación <span class="fname">.skill</span> (parecido a un .zip). Por dentro suele contener:</p>
+        <ul>
+          <li><b><span class="fname">SKILL.md</span></b> — el archivo principal con las instrucciones. La terminación <b>.md</b> es "Markdown", un formato de texto simple que abre cualquier editor.</li>
+          <li><b>Carpeta <span class="fname">reference/</span></b> — documentos de apoyo con reglas detalladas y, en su caso, un ejemplo ficticio que ilustra el patrón.</li>
+          <li><b>Carpeta <span class="fname">assets/</span></b> — archivos que la skill usa, como una plantilla en Word.</li>
+          <li><b><span class="fname">CHANGELOG.md</span></b> — el historial de cambios.</li>
+        </ul>
+        <p>No todas las skills tienen todas las carpetas; depende de la tarea. Lo único indispensable es el <span class="fname">SKILL.md</span>.</p>
+        <div class="warn"><b>Importante.</b> Una skill genera un <b>borrador o apoyo</b>, no un producto final. Siempre debe revisarla y validarla la persona responsable antes de usarla con un cliente.</div>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Cómo se usa y qué requisitos tiene <span class="chev">›</span></summary>
+      <div class="body">
+        <h3>Para usarla</h3>
+        <p>La skill debe estar instalada en la cuenta de PFF (aparece en <b>Configuración → Habilidades</b>). Para pedir la tarea basta describirla, pero lo más seguro es <b>nombrar la skill</b> para que Claude no dude cuál usar:</p>
+        <ul>
+          <li>"Usa la skill <b>[nombre]</b> para [tarea]…", o</li>
+          <li>escribir <b>/[nombre]</b>.</li>
+        </ul>
+        <p>La activación automática (cuando Claude reconoce la skill sin que la nombres) se explica en la página <b>Skills, tokens, Cowork y buenas prácticas</b>.</p>
+
+        <h3>Conectores y permisos</h3>
+        <p>Algunas skills necesitan leer archivos que viven <b>fuera</b> de la skill —por ejemplo, una carpeta compartida de Google Drive— porque ese contenido cambia con el tiempo. Para que Claude pueda leerla, en la cuenta de cada persona hacen falta dos cosas:</p>
+        <ol>
+          <li>El <b>conector</b> correspondiente activado (p. ej. Google Drive).</li>
+          <li>Que la carpeta o el archivo estén <b>compartidos</b> con esa cuenta.</li>
+        </ol>
+        <p>Si falta alguna, Claude avisará que no pudo acceder. No es un error de la skill: es un tema de permisos que se resuelve compartiendo el recurso o activando el conector. Las skills que no dependen de recursos externos no requieren este paso.</p>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Versiones, nombres y changelog <span class="chev">›</span></summary>
+      <div class="body">
+        <p>Cada vez que una skill mejora, sube de versión con el esquema <b>MAYOR.MENOR</b> (por ejemplo, 1.2):</p>
+        <ul>
+          <li>Sube el número <b>MENOR</b> para ajustes y reglas nuevas (1.1 → 1.2).</li>
+          <li>Sube el número <b>MAYOR</b> para cambios de fondo, como una nueva plantilla del despacho o un cambio estructural (1.x → 2.0).</li>
+        </ul>
+        <p>El <span class="fname">CHANGELOG.md</span> dentro de la skill registra qué cambió en cada versión y cuándo, para saber qué incluye la versión vigente sin preguntar.</p>
+        <h3>Convención de nombre</h3>
+        <p>El archivo se nombra con su número de versión: <span class="fname">[nombre-de-la-skill]-v1.2.skill</span>. La versión más alta es siempre la vigente; conviene no renombrar de otra forma para que todos identifiquen la actual.</p>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Quién edita y cómo se actualiza <span class="chev">›</span></summary>
+      <div class="body">
+        <p><b>Fuente de verdad</b> (source of truth) es el único lugar oficial donde vive la versión correcta. Aunque circulen copias, solo una es la "buena".</p>
+        <ul>
+          <li><b>Una sola persona responsable</b> edita cada skill y produce cada actualización oficial; los demás la usan.</li>
+          <li>El archivo <span class="fname">.skill</span> no tiene candado: cualquiera con una copia puede abrirla y modificarla en su computadora. El control no viene del archivo, sino de <b>dónde se guarda el original</b>.</li>
+          <li>Si quieres un cambio, compártelo con quien creó la skill para conciliar versiones; esa persona revisa, combina y publica la nueva.</li>
+        </ul>
+        <h3>Proceso de actualización</h3>
+        <ol>
+          <li>La persona responsable edita los archivos de la skill.</li>
+          <li>Sube el número de versión (en <span class="fname">CHANGELOG.md</span> y en <span class="fname">SKILL.md</span>).</li>
+          <li>Anota en el <span class="fname">CHANGELOG.md</span> qué cambió.</li>
+          <li>Vuelve a empaquetar la skill (genera el nuevo <span class="fname">.skill</span>).</li>
+          <li>Publica la nueva versión por la distribución centralizada.</li>
+        </ol>
+        <div class="tip"><b>Tip.</b> ¿Problema técnico con una skill o una idea para mejorarla? Solo quien la creó puede actualizarla para todo PFF. Si la creó Ana, usa <b>Feedback y Updates</b>.</div>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Distribución centralizada y marketplace <span class="chev">›</span></summary>
+      <div class="body">
+        <h3>Distribución centralizada</h3>
+        <p>Un administrador publica la skill <b>una sola vez</b> en la cuenta de PFF y todo el equipo la recibe; cuando sale una versión nueva por esa vía, se propaga a todos. La propagación va de la copia central hacia todos:</p>
+        <ul>
+          <li>Si alguien edita una skill en su propia cuenta, crea una <b>copia personal</b> que solo afecta a esa cuenta.</li>
+          <li>Para que un cambio llegue a todo el equipo, debe publicarse en la <b>copia central</b>, por quien tenga permisos de administración. No basta con editarlo en una cuenta individual.</li>
+        </ul>
+        <h3>Marketplace</h3>
+        <p>Un marketplace es un <b>catálogo privado de plugins</b> de la organización. En lugar de que cada quien instale archivos sueltos, hay un solo lugar central del que todos instalan los plugins aprobados. Eso da control de versiones, aprobación y actualización desde un único punto.</p>
+      </div>
+    </details>
+
+    <div class="grouptitle">Biblioteca de prompts</div>
+
+<div class="lead">Copia el prompt, reemplaza lo que está entre corchetes <code>[así]</code> y pégalo en Claude. Son puntos de partida: ajústalos a tu caso y, en materia fiscal, verifica siempre fundamentos y cifras.</div>
+
+    <details class="sec" open>
+      <summary>Redacción <span class="chev">›</span></summary>
+      <div class="body">
+        <div class="ptitle">Memo de riesgos fiscales</div>
+        <div class="prompt">Actúa como abogado fiscalista de PFF. Redacta un memo dirigido a [cliente] que explique, en 5 puntos, los riesgos fiscales de [situación]. Tono formal, en español. Cita los artículos aplicables del CFF/LISR/LIVA e indícame cuáles debo verificar antes de enviarlo.</div>
+        <div class="hint">Ajusta el número de puntos y el destinatario.</div>
+
+        <div class="ptitle">Correo solicitando documentación</div>
+        <div class="prompt">Redacta un correo breve y profesional para [cliente] solicitando la siguiente documentación: [lista]. Tono cordial, en español, con una fecha límite sugerida.</div>
+
+        <div class="ptitle">Reescribir en tono formal</div>
+        <div class="prompt">Reescribe el siguiente texto en tono formal de despacho, claro y conciso, en español, sin cambiar el fondo:
+[pega tu texto]</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Análisis de documentos <span class="chev">›</span></summary>
+      <div class="body">
+        <div class="ptitle">Resumen de contrato</div>
+        <div class="prompt">Te comparto un contrato. Resume en una tabla: partes, objeto, vigencia, obligaciones de pago y cláusulas con posible impacto fiscal. Al final, lista qué puntos debo verificar.</div>
+
+        <div class="ptitle">Estado de cuenta a Excel</div>
+        <div class="prompt">Analiza este estado de cuenta y crea un Excel con los movimientos por mes y sus totales. Marca en una columna aparte los movimientos que parezcan atípicos y explica por qué.</div>
+
+        <div class="ptitle">Comparar dos versiones</div>
+        <div class="prompt">Compara estas dos versiones del mismo documento y dime, en una lista, qué cambió (agregado, eliminado, modificado). Señala los cambios con impacto fiscal o legal.</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Formatos y skills del despacho <span class="chev">›</span></summary>
+      <div class="body">
+        <div class="ptitle">Carta-propuesta de servicios</div>
+        <div class="prompt">Usa la skill redactar-propuestas para preparar la primera versión de una carta-propuesta de servicios para [cliente], con el siguiente alcance: [describe los servicios].</div>
+        <div class="hint">Recuerda: la skill genera un borrador; revísalo antes de enviarlo.</div>
+
+        <div class="ptitle">Documento con formato del despacho</div>
+        <div class="prompt">Genera un [memo/escrito] en Word sobre [tema]. Sigue el formato del despacho; adjunto un documento modelo para que copies su estilo: [adjunta modelo].</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Aprender y vocabulario <span class="chev">›</span></summary>
+      <div class="body">
+        <div class="ptitle">Explicar un concepto</div>
+        <div class="prompt">Usa la skill learn. Explícame qué es [concepto fiscal/legal] y para qué sirve, con un ejemplo sencillo. Asume que entiendo bien matemáticas pero soy nuevo en derecho fiscal.</div>
+
+        <div class="ptitle">Diferenciar dos términos que confundo</div>
+        <div class="prompt">Explícame la diferencia entre [término A] y [término B] con una tabla breve y un ejemplo de cada uno, en español.</div>
+      </div>
+    </details>
+
+    <div class="nota"><b>Nota — espacio para crecer:</b> este es el arranque. Iremos sumando los prompts de PFF que den buenos resultados. Si tienes uno que funciona muy bien, compártelo para agregarlo.</div>
+
+    <div class="grouptitle">Problemas conocidos y soluciones</div>
+
+<div class="lead">Casos frecuentes con su causa y su solución. La mayoría no son fallas: suelen ser permisos, configuración o la forma de pedir la tarea.</div>
+
+    <details class="sec" open>
+      <summary>Claude dice que no puede acceder a una carpeta o archivo de Google Drive <span class="chev">›</span></summary>
+      <div class="body">
+        <p class="causa"><b>Causa:</b> el conector de Google Drive no está activado en tu cuenta, o la carpeta/archivo no está compartido contigo.</p>
+        <div class="sol"><b>Solución:</b> activa el conector en <b>Configuración → Conectores</b> y pide que compartan la carpeta o el archivo con tu cuenta. Es un tema de permisos, no de la skill. Más detalle en la página <b>Skills de PFF</b>, sección "Cómo se usa y qué requisitos tiene".</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Claude no usa la skill que esperaba, o no aparece <span class="chev">›</span></summary>
+      <div class="body">
+        <p class="causa"><b>Causa:</b> la skill no está instalada en la cuenta, o no quedó claro cuál usar.</p>
+        <div class="sol"><b>Solución:</b> verifica que aparezca en <b>Configuración → Habilidades</b> e invócala nombrándola: <code>/nombre-de-la-skill</code> o "usa la skill [nombre] para…".</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Claude sobrescribió o cambió un archivo que no debía <span class="chev">›</span></summary>
+      <div class="body">
+        <p class="causa"><b>Causa:</b> se trabajó en modo "Actuar sin preguntar" al editar un documento existente.</p>
+        <div class="sol"><b>Solución:</b> al editar, usa el modo <b>"Preguntar antes de actuar"</b> y trabaja sobre copias o borradores. Google Drive y Docs guardan historial de versiones, así que casi siempre se puede recuperar la versión anterior.</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Se acabó el límite o las respuestas van muy lentas <span class="chev">›</span></summary>
+      <div class="body">
+        <p class="causa"><b>Causa:</b> una conversación muy larga consume más tokens en cada mensaje, o se alcanzó el tope de la sesión.</p>
+        <div class="sol"><b>Solución:</b> abre un <b>chat nuevo</b> por cada tema distinto y revisa tu consumo en <b>Configuración → Uso</b> (Sesión actual vs. Límites). Más contexto en la página <b>Skills, tokens, Cowork y buenas prácticas</b>.</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>El Word o Excel generado no respeta el formato del despacho <span class="chev">›</span></summary>
+      <div class="body">
+        <p class="causa"><b>Causa:</b> no se indicó una plantilla ni un estilo a seguir.</p>
+        <div class="sol"><b>Solución:</b> pide explícitamente que siga el formato de PFF, adjunta un documento modelo ("sigue este estilo"), o usa la skill correspondiente (por ejemplo, <code>redactar-propuestas</code>).</div>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>Claude inventó un artículo, una fecha o una cifra <span class="chev">›</span></summary>
+      <div class="body">
+        <p class="causa"><b>Causa:</b> Claude puede equivocarse o "alucinar" datos, sobre todo en fundamentos legales y números.</p>
+        <div class="sol"><b>Solución:</b> verifica siempre artículos, fechas y cálculos antes de usarlos con un cliente. Pídele que <b>señale qué debes verificar</b> y que cite la fuente. Claude es un asistente, no la autoridad final.</div>
+      </div>
+    </details>
+
+    <div class="nota"><b>Nota — espacio para crecer:</b> iremos sumando aquí los problemas reales que encuentre el equipo, con su solución. Si topaste con algo y lo resolviste, compártelo para documentarlo.</div>
+
+    <div class="grouptitle">Aportar a la guía</div>
+
+<details class="sec">
+      <summary>Abierto a sugerencias <span class="chev">›</span></summary>
+      <div class="body">
+        <p>Esta guía es de todo el equipo y mejora con lo que aporten. Si encuentras un truco, una duda recurrente, un prompt que funciona muy bien, o algo que falta explicar, compártelo.</p>
+
+        <h3>Cómo aportar</h3>
+        <ul>
+          <li><b>Formulario de feedback:</b> usa el formulario "Toolbox Digital — Feedback y sugerencias" del despacho.</li>
+          <li><b>Correo directo:</b> escríbele a Ana con tu idea o ejemplo.</li>
+          <li><b>Casos reales:</b> si resolviste algo útil con Claude, comparte el prompt y el resultado para sumarlo a la guía.</li>
+        </ul>
+
+        <div class="btns">
+          <a class="btn green" href="mailto:agalan@pffsc.com?subject=Sugerencia%20para%20la%20Gu%C3%ADa%20Claude%20(PFF)&body=Hola%20Ana%2C%0A%0AMi%20sugerencia%2Fidea%20para%20la%20gu%C3%ADa%20de%20Claude%20es%3A%0A%0A">Enviar una sugerencia</a>
+          <a class="btn" href="mailto:agalan@pffsc.com?subject=Duda%20sobre%20Claude%20(PFF)&body=Hola%20Ana%2C%0A%0AMi%20duda%20sobre%20Claude%20es%3A%0A%0A">Enviar una consulta a Ana</a>
+        </div>
+
+        <div class="nota"><b>Nota — espacio para notas:</b> ideas recibidas pendientes de integrar.</div>
+      </div>
+    </details>
+  </div>
+</div>
+<script>
+(function(){
+  var input=document.getElementById('search');
+  var count=document.getElementById('scount');
+  var root=document.getElementById('contenido');
+  if(!input||!root) return;
+  var fold=(function(){
+    var map={'á':'a','à':'a','ä':'a','â':'a','é':'e','è':'e','ë':'e','ê':'e',
+      'í':'i','ì':'i','ï':'i','î':'i','ó':'o','ò':'o','ö':'o','ô':'o',
+      'ú':'u','ù':'u','ü':'u','û':'u','ñ':'n','ç':'c'};
+    return function(s){s=s.toLowerCase();var o='';for(var i=0;i<s.length;i++){var c=s[i];o+=map[c]||c;}return o;};
+  })();
+  var marks=[], cur=-1;
+  function clearMarks(){root.querySelectorAll('mark.hit').forEach(function(m){m.parentNode.replaceChild(document.createTextNode(m.textContent),m);});root.normalize();marks=[];cur=-1;}
+  function textNodes(el){var out=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+    if(!n.nodeValue.trim())return NodeFilter.FILTER_REJECT;var p=n.parentNode.nodeName.toLowerCase();
+    if(p==='script'||p==='style'||p==='mark')return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT;}});
+    var n;while((n=w.nextNode()))out.push(n);return out;}
+  function openAncestors(m){var p=m.parentNode;while(p&&p!==root){if(p.tagName&&p.tagName.toLowerCase()==='details')p.open=true;p=p.parentNode;}}
+  function run(){
+    clearMarks();var q=input.value.trim();if(q.length<2){count.textContent='';return;}var qf=fold(q);
+    textNodes(root).forEach(function(node){var text=node.nodeValue,tf=fold(text),idx=0,hits=[];
+      while((idx=tf.indexOf(qf,idx))!==-1){hits.push(idx);idx+=qf.length;}if(!hits.length)return;
+      var frag=document.createDocumentFragment(),last=0;
+      hits.forEach(function(h){if(h>last)frag.appendChild(document.createTextNode(text.slice(last,h)));
+        var m=document.createElement('mark');m.className='hit';m.textContent=text.slice(h,h+q.length);frag.appendChild(m);last=h+q.length;});
+      if(last<text.length)frag.appendChild(document.createTextNode(text.slice(last)));node.parentNode.replaceChild(frag,node);});
+    marks=Array.prototype.slice.call(root.querySelectorAll('mark.hit'));marks.forEach(openAncestors);
+    count.textContent=marks.length?marks.length+' coincidencia'+(marks.length>1?'s':''):'sin coincidencias';
+    if(marks.length){cur=0;focusCur();}
+  }
+  function focusCur(){marks.forEach(function(m){m.classList.remove('cur');});
+    if(cur>=0&&marks[cur]){marks[cur].classList.add('cur');if(marks[cur].scrollIntoView)marks[cur].scrollIntoView({block:'center',behavior:'smooth'});}}
+  input.addEventListener('input',run);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter'&&marks.length){e.preventDefault();cur=(cur+(e.shiftKey?-1:1)+marks.length)%marks.length;focusCur();}});
+})();
+</script>
+<script>
+(function(){
+  var toc=document.getElementById('toc');
+  var root=document.getElementById('contenido');
+  if(!toc||!root) return;
+  var ul=document.createElement('ul');
+  var head=document.createElement('div'); head.className='toch'; head.textContent='En esta página';
+  toc.appendChild(head); toc.appendChild(ul);
+  var i=0, items=0;
+  Array.prototype.forEach.call(root.children,function(el){
+    if(el.classList && el.classList.contains('grouptitle')){
+      var g=document.createElement('li'); g.className='tocgroup'; g.textContent=el.textContent.trim(); ul.appendChild(g); return;
+    }
+    if(el.tagName && el.tagName.toLowerCase()==='details'){
+      var sum=el.querySelector('summary'); if(!sum) return;
+      var txt=sum.textContent.replace(/›/g,'').trim();
+      if(!el.id) el.id='sec-'+(i++);
+      var li=document.createElement('li');
+      var a=document.createElement('a'); a.href='#'+el.id; a.textContent=txt;
+      a.addEventListener('click',function(ev){ev.preventDefault(); el.open=true;
+        if(el.scrollIntoView) el.scrollIntoView({block:'start',behavior:'smooth'});});
+      li.appendChild(a); ul.appendChild(li); items++;
+    }
+  });
+  if(items===0){
+    head.textContent='Ir a la letra';
+    Array.prototype.forEach.call(root.querySelectorAll('.letra'),function(el){
+      if(!el.id) el.id='letra-'+el.textContent.trim();
+      var li=document.createElement('li');
+      var a=document.createElement('a'); a.href='#'+el.id; a.textContent=el.textContent.trim();
+      a.addEventListener('click',function(ev){ev.preventDefault(); if(el.scrollIntoView) el.scrollIntoView({block:'start',behavior:'smooth'});});
+      li.appendChild(a); ul.appendChild(li);
+    });
+  }
+})();
+</script>
+</body>
+</html>

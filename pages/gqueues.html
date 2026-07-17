@@ -1,0 +1,2334 @@
+<!-- FALTA TITULO / HEADER -->
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GQueues para PFF. Guía práctica del despacho</title>
+    <style>
+      :root {
+        --azul: #13315c;
+        --azul2: #1d4e89;
+        --acento: #2a9d8f;
+        --acento2: #e9c46a;
+        --bg: #f5f7fa;
+        --card: #ffffff;
+        --texto: #1f2937;
+        --suave: #5b6470;
+        --linea: #e3e8ef;
+        --en: #0b6e6e;
+        --enbg: #e6f4f1;
+        --aviso: #fff7e6;
+        --avisob: #e0a800;
+        --no: #fdecec;
+        --nob: #c0392b;
+        --si: #eaf7ef;
+        --sib: #1e8449;
+        --sombra:
+          0 1px 3px rgba(16, 38, 73, 0.08), 0 6px 20px rgba(16, 38, 73, 0.06);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+        background: var(--bg);
+        color: var(--texto);
+        line-height: 1.6;
+        font-size: 16px;
+      }
+      a {
+        color: var(--azul2);
+      }
+      header.top {
+        background: linear-gradient(135deg, var(--azul), var(--azul2));
+        color: #fff;
+        padding: 34px 24px 30px;
+      }
+      header.top .wrap {
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+      header.top h1 {
+        margin: 0;
+        font-size: 30px;
+        letter-spacing: 0.3px;
+      }
+      header.top .sub {
+        font-size: 17px;
+        opacity: 0.92;
+        margin-top: 4px;
+      }
+      header.top .meta {
+        font-size: 13px;
+        opacity: 0.8;
+        margin-top: 14px;
+      }
+      .layout {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 24px;
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 26px;
+        align-items: start;
+      }
+      nav.toc {
+        position: sticky;
+        top: 18px;
+        background: var(--card);
+        border: 1px solid var(--linea);
+        border-radius: 14px;
+        padding: 16px;
+        box-shadow: var(--sombra);
+        max-height: calc(100vh - 36px);
+        overflow: auto;
+      }
+      nav.toc h2 {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--suave);
+        margin: 0 0 10px;
+      }
+      nav.toc a {
+        display: block;
+        padding: 7px 10px;
+        border-radius: 8px;
+        color: var(--texto);
+        text-decoration: none;
+        font-size: 14px;
+      }
+      nav.toc a:hover {
+        background: var(--bg);
+      }
+      nav.toc a .n {
+        color: var(--acento);
+        font-weight: 700;
+        margin-right: 6px;
+      }
+      .search {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--linea);
+        border-radius: 10px;
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+      main {
+        min-width: 0;
+      }
+      .lead {
+        background: var(--card);
+        border: 1px solid var(--linea);
+        border-left: 4px solid var(--acento);
+        border-radius: 12px;
+        padding: 18px 20px;
+        box-shadow: var(--sombra);
+        margin-bottom: 20px;
+      }
+      .lead p {
+        margin: 0.4em 0;
+      }
+      details.sec {
+        background: var(--card);
+        border: 1px solid var(--linea);
+        border-radius: 14px;
+        margin-bottom: 14px;
+        box-shadow: var(--sombra);
+        overflow: hidden;
+      }
+      details.sec > summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 16px 20px;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--azul);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        user-select: none;
+      }
+      details.sec > summary::-webkit-details-marker {
+        display: none;
+      }
+      details.sec > summary .num {
+        background: var(--azul);
+        color: #fff;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        flex: 0 0 auto;
+      }
+      details.sec > summary .chev {
+        margin-left: auto;
+        transition: transform 0.2s;
+        color: var(--suave);
+      }
+      details.sec[open] > summary .chev {
+        transform: rotate(90deg);
+      }
+      details.sec[open] > summary {
+        border-bottom: 1px solid var(--linea);
+      }
+      .body {
+        padding: 6px 22px 20px;
+      }
+      h3 {
+        color: var(--azul2);
+        font-size: 15.5px;
+        margin: 18px 0 6px;
+      }
+      ul,
+      ol {
+        margin: 0.4em 0 0.6em;
+        padding-left: 22px;
+      }
+      li {
+        margin: 0.28em 0;
+      }
+      .en {
+        background: var(--enbg);
+        color: var(--en);
+        border: 1px solid #bfe3dd;
+        border-radius: 6px;
+        padding: 1px 7px;
+        font-weight: 700;
+        font-size: 0.9em;
+        white-space: nowrap;
+      }
+      .tag {
+        display: inline-block;
+        background: #eef1f6;
+        border: 1px solid var(--linea);
+        border-radius: 20px;
+        padding: 2px 11px;
+        font-size: 13px;
+        margin: 3px 4px 3px 0;
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+      }
+      .tip {
+        background: var(--enbg);
+        border: 1px solid #bfe3dd;
+        border-left: 4px solid var(--acento);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin: 12px 0;
+        font-size: 14.5px;
+      }
+      .pasos {
+        background: #fcfdfe;
+        border: 1px solid var(--linea);
+        border-radius: 10px;
+        padding: 12px 18px 12px;
+        margin: 10px 0;
+      }
+      .pasos h4 {
+        margin: 2px 0 6px;
+        color: var(--azul);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 10px 0;
+        font-size: 14.5px;
+      }
+      th,
+      td {
+        border: 1px solid var(--linea);
+        padding: 9px 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: var(--azul);
+        color: #fff;
+        font-weight: 600;
+      }
+      tr:nth-child(even) td {
+        background: #fafbfc;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin: 12px 0;
+      }
+      .box {
+        border: 1px solid var(--linea);
+        border-radius: 12px;
+        padding: 14px 16px;
+        background: #fcfdfe;
+      }
+      .box h4 {
+        margin: 0 0 6px;
+        color: var(--azul);
+      }
+      .pro,
+      .con {
+        border-radius: 12px;
+        padding: 14px 16px;
+      }
+      .pro {
+        background: var(--si);
+        border: 1px solid #bfe4cd;
+      }
+      .pro h4 {
+        color: var(--sib);
+        margin: 0 0 6px;
+      }
+      .btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 10px 0;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--azul2);
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .btn.alt {
+        background: #fff;
+        color: var(--azul2);
+        border: 1px solid var(--azul2);
+      }
+      .btn.green {
+        background: var(--acento);
+      }
+      .flow {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin: 14px 0;
+      }
+      .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        position: relative;
+      }
+      .step .dot {
+        flex: 0 0 auto;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--azul);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        z-index: 1;
+      }
+      .step .c {
+        background: #fcfdfe;
+        border: 1px solid var(--linea);
+        border-radius: 12px;
+        padding: 10px 14px;
+        margin-bottom: 14px;
+        flex: 1;
+      }
+      .step .c b {
+        color: var(--azul);
+      }
+      .step:not(:last-child)::before {
+        content: "";
+        position: absolute;
+        left: 19px;
+        top: 40px;
+        bottom: 0;
+        width: 2px;
+        background: var(--acento);
+      }
+      .loop {
+        background: var(--enbg);
+        border: 1px dashed var(--acento);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-top: 8px;
+      }
+      .loop b {
+        color: var(--en);
+      }
+      footer {
+        max-width: 1180px;
+        margin: 10px auto 50px;
+        padding: 0 24px;
+      }
+      .support {
+        background: linear-gradient(135deg, var(--azul), var(--azul2));
+        color: #fff;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+      }
+      .support h3 {
+        color: #fff;
+        margin: 0 0 6px;
+        font-size: 20px;
+      }
+      .support p {
+        opacity: 0.92;
+        margin: 0.3em 0 14px;
+      }
+      .no-match {
+        display: none !important;
+      }
+      .sitenav {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(3px);
+        border-bottom: 1px solid var(--linea);
+        padding: 12px 24px;
+      }
+      .sitenav a {
+        color: var(--azul2);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .sitenav a:hover {
+        text-decoration: underline;
+      }
+      .sitenav .sitenav-home {
+        color: var(--azul);
+        font-weight: 700;
+      }
+      .sitenav a.active {
+        color: var(--acento);
+      }
+      @media (max-width: 860px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        nav.toc {
+          position: static;
+          max-height: none;
+        }
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="sitenav">
+      <a class="sitenav-home" href="../index.html">← Kit Digital</a>
+      <a class="active" href="gqueues.html">GQueues</a>
+      <a href="guia-claude-01-introduccion.html">Guía de Claude</a>
+      <a href="feedback.html">Feedback</a>
+    </nav>
+    <div class="layout">
+      <nav class="toc">
+        <input
+          class="search"
+          id="search"
+          type="search"
+          placeholder="🔍 Buscar en la guía..."
+        />
+        <h2>Contenido</h2>
+        <a href="#s0"><span class="n">•</span>¿Qué es GQueues?</a>
+        <a href="#s1"><span class="n">1</span>Cómo se organiza</a>
+        <a href="#s2"><span class="n">2</span>Category o Tag</a>
+        <a href="#s3"><span class="n">3</span>Estructura para PFF</a>
+        <a href="#s4"><span class="n">4</span>El menú de la izquierda</a>
+        <a href="#s5"><span class="n">5</span>Inbox</a>
+        <a href="#s6"><span class="n">6</span>Crear tareas</a>
+        <a href="#s7"><span class="n">7</span>Dentro de una tarea</a>
+        <a href="#ssec"><span class="n">8</span>Sections y tablero</a>
+        <a href="#s8"><span class="n">9</span>Smart Queues</a>
+        <a href="#s9"><span class="n">10</span>Tags (etiquetas)</a>
+        <a href="#s10"><span class="n">11</span>Trabajar en equipo</a>
+        <a href="#s11"><span class="n">12</span>Privacidad</a>
+        <a href="#s12"><span class="n">13</span>Correos como tareas</a>
+        <a href="#s13"><span class="n">14</span>Apps y extensiones</a>
+        <a href="#s14"><span class="n">15</span>Atajos de teclado</a>
+        <a href="#s15"><span class="n">16</span>El flujo ideal</a>
+        <a href="#s16"><span class="n">17</span>Recursos y soporte</a>
+      </nav>
+
+      <main>
+        <div class="lead">
+          <p>
+            <b>Sobre el idioma.</b> La aplicación está en inglés. En esta guía
+            aparece el nombre real del botón en inglés, así:
+            <span class="en">Queue</span>, seguido de su explicación en español,
+            para localizarlo tal cual en pantalla.
+          </p>
+        </div>
+
+        <details class="sec" id="s0" open>
+          <summary>
+            <span class="num">★</span>¿Qué es GQueues?
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              GQueues es un <b>gestor de tareas y listas de pendientes</b> que
+              opera dentro de la cuenta de Google (Gmail, Calendar, Drive).
+              Permite registrar el trabajo por hacer, organizarlo por cliente o
+              tema, asignarle fechas, distribuirlo entre colegas y darle
+              seguimiento.
+            </p>
+            <p>
+              Funciona como una
+              <b>libreta de pendientes compartida e inteligente</b>: en lugar de
+              notas sueltas, correos y recordatorios dispersos, todo se
+              concentra en un solo lugar.
+            </p>
+          </div>
+        </details>
+
+        <details class="sec" id="s1" open>
+          <summary>
+            <span class="num">1</span>Cómo se organiza GQueues
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <ul>
+              <li>
+                <span class="en">Categories</span> <b>(Categorías):</b> el nivel
+                más alto. Agrupan queues. No existe una queue sin una categoría
+                que la contenga.
+              </li>
+              <li>
+                <span class="en">Queues</span> <b>(Listas):</b> las listas
+                dentro de una categoría. Aquí viven <b>todas</b> las tareas. Son
+                más específicas que la categoría.
+              </li>
+              <li>
+                <span class="en">Sections</span> <b>(Secciones):</b> encabezados
+                para agrupar tareas dentro de una misma queue, sin necesidad de
+                crear subtareas.
+              </li>
+              <li>
+                <span class="en">Tasks</span> <b>(Tareas):</b> la unidad de
+                trabajo. Todo lo que se captura es una tarea.
+              </li>
+              <li>
+                <span class="en">Subtasks</span> <b>(Subtareas):</b> tareas
+                dentro de una tarea, para desglosar un pendiente grande.
+              </li>
+            </ul>
+            <figure
+              style="
+                margin: 14px 0;
+                background: #fcfdfe;
+                border: 1px solid var(--linea);
+                border-radius: 12px;
+                padding: 14px;
+              "
+            >
+              <svg
+                viewBox="0 0 940 470"
+                xmlns="http://www.w3.org/2000/svg"
+                role="img"
+                aria-label="Ilustración esquemática de la interfaz de GQueues"
+                style="width: 100%; height: auto; display: block"
+              >
+                <defs>
+                  <marker
+                    id="ah"
+                    markerWidth="9"
+                    markerHeight="9"
+                    refX="7"
+                    refY="3"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                  >
+                    <path d="M0,0 L7,3 L0,6 Z" fill="#b8472f" />
+                  </marker>
+                </defs>
+                <rect
+                  x="160"
+                  y="50"
+                  width="190"
+                  height="400"
+                  rx="12"
+                  fill="#eef2f7"
+                  stroke="#d6deea"
+                />
+                <rect
+                  x="370"
+                  y="50"
+                  width="430"
+                  height="400"
+                  rx="12"
+                  fill="#ffffff"
+                  stroke="#d6deea"
+                />
+                <text
+                  x="180"
+                  y="86"
+                  font-family="sans-serif"
+                  font-size="14"
+                  fill="#41506a"
+                >
+                  📥 Inbox
+                </text>
+                <text
+                  x="180"
+                  y="114"
+                  font-family="sans-serif"
+                  font-size="14"
+                  fill="#41506a"
+                >
+                  ⚡ Smart Queues
+                </text>
+                <text
+                  x="180"
+                  y="142"
+                  font-family="sans-serif"
+                  font-size="14"
+                  fill="#41506a"
+                >
+                  👥 Team Queues
+                </text>
+                <text
+                  x="180"
+                  y="170"
+                  font-family="sans-serif"
+                  font-size="14"
+                  fill="#41506a"
+                >
+                  🏷️ Tags
+                </text>
+                <text
+                  x="180"
+                  y="202"
+                  font-family="sans-serif"
+                  font-size="11"
+                  letter-spacing="1"
+                  fill="#8a93a5"
+                >
+                  MY QUEUES
+                </text>
+                <rect
+                  x="170"
+                  y="216"
+                  width="170"
+                  height="26"
+                  rx="6"
+                  fill="#d6ece8"
+                />
+                <text
+                  x="182"
+                  y="234"
+                  font-family="sans-serif"
+                  font-size="14"
+                  font-weight="700"
+                  fill="#13315c"
+                >
+                  ▾ Clientes
+                </text>
+                <rect
+                  x="186"
+                  y="248"
+                  width="154"
+                  height="24"
+                  rx="6"
+                  fill="#d7e6f5"
+                />
+                <text
+                  x="198"
+                  y="265"
+                  font-family="sans-serif"
+                  font-size="13.5"
+                  fill="#13315c"
+                >
+                  Cliente A
+                </text>
+                <text
+                  x="198"
+                  y="292"
+                  font-family="sans-serif"
+                  font-size="13.5"
+                  fill="#41506a"
+                >
+                  Cliente B
+                </text>
+                <text
+                  x="198"
+                  y="318"
+                  font-family="sans-serif"
+                  font-size="13.5"
+                  fill="#41506a"
+                >
+                  Auditoría C
+                </text>
+                <text
+                  x="182"
+                  y="350"
+                  font-family="sans-serif"
+                  font-size="14"
+                  fill="#41506a"
+                >
+                  ▸ Despacho
+                </text>
+                <text
+                  x="182"
+                  y="376"
+                  font-family="sans-serif"
+                  font-size="14"
+                  fill="#41506a"
+                >
+                  ▸ Personal
+                </text>
+                <text
+                  x="392"
+                  y="92"
+                  font-family="sans-serif"
+                  font-size="20"
+                  font-weight="700"
+                  fill="#13315c"
+                >
+                  Cliente A
+                </text>
+                <text
+                  x="392"
+                  y="112"
+                  font-family="sans-serif"
+                  font-size="12"
+                  fill="#8a93a5"
+                >
+                  5 tareas activas
+                </text>
+                <text
+                  x="392"
+                  y="150"
+                  font-family="sans-serif"
+                  font-size="14"
+                  font-weight="700"
+                  fill="#1d4e89"
+                >
+                  Escritos
+                </text>
+                <line x1="392" y1="158" x2="500" y2="158" stroke="#d6deea" />
+                <rect
+                  x="392"
+                  y="174"
+                  width="13"
+                  height="13"
+                  rx="3"
+                  fill="#fff"
+                  stroke="#9aa6b8"
+                />
+                <text
+                  x="414"
+                  y="185"
+                  font-family="sans-serif"
+                  font-size="13.5"
+                  fill="#1f2937"
+                >
+                  Contestar requerimiento del SAT
+                </text>
+                <rect
+                  x="392"
+                  y="204"
+                  width="13"
+                  height="13"
+                  rx="3"
+                  fill="#fff"
+                  stroke="#9aa6b8"
+                />
+                <text
+                  x="414"
+                  y="215"
+                  font-family="sans-serif"
+                  font-size="13.5"
+                  fill="#1f2937"
+                >
+                  Preparar papeles de trabajo
+                </text>
+                <rect
+                  x="430"
+                  y="230"
+                  width="12"
+                  height="12"
+                  rx="3"
+                  fill="#fff"
+                  stroke="#9aa6b8"
+                />
+                <text
+                  x="450"
+                  y="240"
+                  font-family="sans-serif"
+                  font-size="12.5"
+                  fill="#5b6470"
+                >
+                  Reunir comprobantes XML
+                </text>
+                <rect
+                  x="392"
+                  y="258"
+                  width="13"
+                  height="13"
+                  rx="3"
+                  fill="#fff"
+                  stroke="#9aa6b8"
+                />
+                <text
+                  x="414"
+                  y="269"
+                  font-family="sans-serif"
+                  font-size="13.5"
+                  fill="#1f2937"
+                >
+                  Revisar borrador de escrito
+                </text>
+                <text
+                  x="392"
+                  y="306"
+                  font-family="sans-serif"
+                  font-size="14"
+                  font-weight="700"
+                  fill="#1d4e89"
+                >
+                  Seguimiento
+                </text>
+                <line x1="392" y1="314" x2="500" y2="314" stroke="#d6deea" />
+                <rect
+                  x="392"
+                  y="330"
+                  width="13"
+                  height="13"
+                  rx="3"
+                  fill="#fff"
+                  stroke="#9aa6b8"
+                />
+                <text
+                  x="414"
+                  y="341"
+                  font-family="sans-serif"
+                  font-size="13.5"
+                  fill="#1f2937"
+                >
+                  Llamada con el cliente
+                </text>
+                <rect
+                  x="392"
+                  y="360"
+                  width="13"
+                  height="13"
+                  rx="3"
+                  fill="#fff"
+                  stroke="#9aa6b8"
+                />
+                <text
+                  x="414"
+                  y="371"
+                  font-family="sans-serif"
+                  font-size="13.5"
+                  fill="#1f2937"
+                >
+                  Enviar propuesta de honorarios
+                </text>
+                <g font-family="sans-serif">
+                  <text
+                    x="16"
+                    y="225"
+                    font-size="13"
+                    font-weight="700"
+                    fill="#b8472f"
+                  >
+                    CATEGORÍA
+                  </text>
+                  <text x="16" y="240" font-size="11" fill="#b8472f">
+                    (Category)
+                  </text>
+                  <line
+                    x1="118"
+                    y1="230"
+                    x2="166"
+                    y2="229"
+                    stroke="#b8472f"
+                    stroke-width="1.6"
+                    marker-end="url(#ah)"
+                  />
+                  <text
+                    x="44"
+                    y="288"
+                    font-size="13"
+                    font-weight="700"
+                    fill="#b8472f"
+                  >
+                    QUEUE
+                  </text>
+                  <text x="18" y="303" font-size="11" fill="#b8472f">
+                    (Lista / carpeta)
+                  </text>
+                  <line
+                    x1="118"
+                    y1="291"
+                    x2="184"
+                    y2="262"
+                    stroke="#b8472f"
+                    stroke-width="1.6"
+                    marker-end="url(#ah)"
+                  />
+                </g>
+                <g font-family="sans-serif">
+                  <text
+                    x="812"
+                    y="147"
+                    font-size="13"
+                    font-weight="700"
+                    fill="#b8472f"
+                  >
+                    SECTION
+                  </text>
+                  <text x="812" y="162" font-size="11" fill="#b8472f">
+                    (Sección)
+                  </text>
+                  <line
+                    x1="808"
+                    y1="150"
+                    x2="506"
+                    y2="152"
+                    stroke="#b8472f"
+                    stroke-width="1.6"
+                    marker-end="url(#ah)"
+                  />
+                  <text
+                    x="812"
+                    y="207"
+                    font-size="13"
+                    font-weight="700"
+                    fill="#b8472f"
+                  >
+                    TASK
+                  </text>
+                  <text x="812" y="222" font-size="11" fill="#b8472f">
+                    (Tarea)
+                  </text>
+                  <line
+                    x1="808"
+                    y1="208"
+                    x2="640"
+                    y2="186"
+                    stroke="#b8472f"
+                    stroke-width="1.6"
+                    marker-end="url(#ah)"
+                  />
+                  <text
+                    x="812"
+                    y="254"
+                    font-size="13"
+                    font-weight="700"
+                    fill="#b8472f"
+                  >
+                    SUBTASK
+                  </text>
+                  <text x="812" y="269" font-size="11" fill="#b8472f">
+                    (Subtarea)
+                  </text>
+                  <line
+                    x1="808"
+                    y1="255"
+                    x2="606"
+                    y2="240"
+                    stroke="#b8472f"
+                    stroke-width="1.6"
+                    marker-end="url(#ah)"
+                  />
+                </g>
+              </svg>
+              <figcaption
+                style="
+                  font-size: 12.5px;
+                  color: var(--suave);
+                  margin-top: 8px;
+                  text-align: center;
+                "
+              >
+                Ilustración esquemática de la interfaz de GQueues (no es una
+                captura real). A la izquierda, el panel con las categorías y
+                queues; a la derecha, las tareas de una queue.
+              </figcaption>
+            </figure>
+            <div class="tip">
+              En PFF conviene que cada <span class="en">Queue</span> funcione
+              como una <b>carpeta de cliente</b>, dentro de la categoría
+              Clientes.
+            </div>
+          </div>
+        </details>
+
+        <details class="sec" id="s2" open>
+          <summary>
+            <span class="num">2</span>¿Category/Queue o Tag?
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <table>
+              <tr>
+                <th>Category / Queue</th>
+                <th>Tag (etiqueta)</th>
+              </tr>
+              <tr>
+                <td>
+                  <b>DÓNDE vive</b> el trabajo. Estable y jerárquico. Cada tarea
+                  vive en <b>una sola</b> queue, su carpeta.
+                </td>
+                <td>
+                  <b>QUÉ TIPO</b> de trabajo es o en qué <b>estado</b> está.
+                  Transversal. Una tarea puede tener <b>varios</b> tags.
+                </td>
+              </tr>
+            </table>
+            <div class="tip">
+              <b>Prueba rápida:</b> si se requiere ver algo que abarca varios
+              clientes a la vez (por ejemplo, todos los vencimientos ante el SAT
+              de la semana, sin importar el cliente), corresponde a un
+              <b>tag</b>, no a una queue.
+            </div>
+          </div>
+        </details>
+
+        <details class="sec" id="s3">
+          <summary>
+            <span class="num">3</span>Estructura sugerida para PFF
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <h3>Categories (tres grandes y amplias)</h3>
+            <ul>
+              <li>
+                <b>Clientes</b> → una <span class="en">Queue</span> por cliente
+                o asunto, a manera de <b>carpeta de cliente</b>. Ej:
+                <span class="tag">Cliente A</span>
+                <span class="tag">Cliente B</span>
+                <span class="tag">Auditoría Cliente C</span>
+              </li>
+              <li>
+                <b>Despacho (interno)</b> → queues:
+                <span class="tag">Administración</span>
+                <span class="tag">Facturación / Cobranza</span>
+                <span class="tag">Mejoras IA &amp; Procesos</span>
+                <span class="tag">Ideas</span>
+              </li>
+              <li><b>Personal</b> → pendientes propios</li>
+            </ul>
+            <p>
+              Un mismo cliente puede tener varios asuntos con el despacho. Para
+              eso sirven las <span class="en">Sections</span> dentro de su
+              <span class="en">Queue</span>: cada section es un caso. Ej:
+              <span class="tag">Auditoría SAT 2023</span>
+              <span class="tag">Devolución IVA 2024</span>
+              <span class="tag">Juicio de nulidad</span>.
+            </p>
+            <h3>Tags (para filtrar)</h3>
+            <ul>
+              <li>
+                <b>Tipo de entregable:</b> <span class="tag">escrito</span>
+                <span class="tag">contestación</span>
+                <span class="tag">propuesta</span>
+                <span class="tag">contrato</span>
+                <span class="tag">dictamen</span>
+                <span class="tag">papeles_de_trabajo</span>
+              </li>
+              <li>
+                <b>Área fiscal:</b> <span class="tag">IVA</span>
+                <span class="tag">ISR</span>
+                <span class="tag">comercio_exterior</span>
+                <span class="tag">auditoría</span>
+                <span class="tag">defensa</span>
+              </li>
+              <li>
+                <b>Estatus:</b> <span class="tag">esperando_cliente</span>
+                <span class="tag">esperando_SAT</span>
+                <span class="tag">en_revisión</span>
+              </li>
+              <li>
+                <b>Prioridad:</b> <span class="tag">urgente</span>
+                <span class="tag">crítico</span>
+              </li>
+            </ul>
+            <div class="tip">
+              Para indicar <b>quién realiza</b> cada tarea conviene usar
+              <span class="en">Assignments</span> (asignaciones) en lugar de un
+              tag. Ver sección 11.
+            </div>
+          </div>
+        </details>
+
+        <details class="sec" id="s4">
+          <summary>
+            <span class="num">4</span>El menú de la izquierda
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              El panel izquierdo es el mapa de la cuenta. El orden, de arriba
+              hacia abajo, es el <b>sugerido para el flujo de trabajo</b>:
+              capturar en el Inbox, revisar prioridades en las Smart Queues,
+              atender el trabajo de equipo, filtrar por Tags y, al final, las
+              listas personales.
+            </p>
+            <ol>
+              <li>
+                <span class="en">Inbox</span>: bandeja de entrada, lo que llega
+                sin clasificar.
+              </li>
+              <li>
+                <span class="en">Smart Queues</span>: listas automáticas
+                (vencidas, hoy, etc.).
+              </li>
+              <li><span class="en">Team Queues</span>: listas de equipo.</li>
+              <li><span class="en">Tags</span>: etiquetas.</li>
+              <li>
+                <span class="en">My Queues</span>: listas personales,
+                organizadas por categorías.
+              </li>
+            </ol>
+            <p>
+              Junto al Inbox también figuran
+              <span class="en">Assignments</span> (lo asignado) y
+              <span class="en">Snoozed</span> (lo pospuesto).
+            </p>
+          </div>
+        </details>
+
+        <details class="sec" id="s5">
+          <summary>
+            <span class="num">5</span>Inbox <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              El <span class="en">Inbox</span> es el espacio para hacer un
+              <b>brain dump</b>: registrar todos los pendientes de forma rápida,
+              sin clasificarlos todavía. La organización se realiza después.
+            </p>
+            <h3>¿Cuándo usarlo?</h3>
+            <ul>
+              <li>
+                Tomar notas en juntas y enviarlas al Inbox para clasificarlas
+                más tarde.
+              </li>
+              <li>Cualquier idea o pendiente que surja a media tarea.</li>
+            </ul>
+            <p>
+              Posteriormente, cada tarea del Inbox se arrastra (<span class="en"
+                >drag</span
+              >) hacia la queue que le corresponde.
+            </p>
+          </div>
+        </details>
+
+        <details class="sec" id="s6">
+          <summary>
+            <span class="num">6</span>Crear tareas: Add Task, Quick Add y Bulk
+            Add <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <h3><span class="en">Add Task</span> (una tarea)</h3>
+            <p>
+              <span class="en">Add Task</span> crea una tarea. Dentro del título
+              se puede usar la sintaxis rápida (ver abajo).
+            </p>
+
+            <h3><span class="en">Bulk Add Tasks</span> (muchas a la vez)</h3>
+            <p>
+              <span class="en">Bulk Add Tasks</span> abre una ventana para
+              agregar <b>muchas tareas de una sola vez</b> (hasta 250), una por
+              línea. Se accede desde el menú desplegable de
+              <span class="en">Add Task</span>.
+            </p>
+            <ul>
+              <li><b>Enter</b>: nueva línea (siguiente tarea).</li>
+              <li><b>Shift + Enter</b>: guardar todas.</li>
+            </ul>
+
+            <h3>¿Y <span class="en">Quick Add</span>?</h3>
+            <p>
+              <span class="en">Quick Add</span> funciona como un pequeño
+              <b>lenguaje de programación</b> para crear tareas: en lugar de
+              llenar campos uno por uno, los detalles se escriben dentro del
+              título con símbolos especiales y GQueues los interpreta (fecha,
+              tags, recordatorios, notas, etc.). Esta sintaxis sirve tanto en
+              <span class="en">Add Task</span> como en la ventana de
+              <span class="en">Bulk Add Tasks</span>, e incluso al crear tareas
+              por correo.
+            </p>
+            <div class="tip">
+              <b>En resumen:</b> <span class="en">Add Task</span> crea
+              <b>una</b> tarea y <span class="en">Bulk Add Tasks</span> crea
+              <b>varias</b> a la vez; <span class="en">Quick Add</span> es la
+              sintaxis que ambas comparten. La sintaxis
+              <span class="en">[nombre de queue]</span> y las subtareas (<span
+                class="en"
+                >-</span
+              >) solo funcionan en la ventana de Bulk Add.
+            </div>
+
+            <h3>Sintaxis (se escribe dentro del título)</h3>
+            <table>
+              <tr>
+                <th>Escribir</th>
+                <th>Resultado</th>
+              </tr>
+              <tr>
+                <td><b>on</b> fecha <b>@</b> hora</td>
+                <td>Fecha y hora. Ej: <i>Entregar escrito viernes @ 3pm</i></td>
+              </tr>
+              <tr>
+                <td><b>#</b>tag</td>
+                <td>Etiqueta (una sola palabra). Ej: <i>#IVA</i></td>
+              </tr>
+              <tr>
+                <td><b>[</b>nombre de queue<b>]</b></td>
+                <td>Enviar la tarea a esa queue (solo en Bulk Add)</td>
+              </tr>
+              <tr>
+                <td><b>^</b>minutos tipo</td>
+                <td>
+                  Recordatorio: avisa ese número de minutos
+                  <b>antes de la fecha u hora</b> de la tarea. El
+                  <i>tipo</i> puede ser <b>email</b> (correo) o
+                  <b>popup</b> (aviso emergente). Ej: <i>^15 email</i> = aviso
+                  por correo 15 minutos antes. Requiere fecha y sincronización
+                  de calendario.
+                </td>
+              </tr>
+              <tr>
+                <td><b>-</b> subtarea</td>
+                <td>
+                  Crear subtarea: <b>solo en la ventana de Bulk Add</b>, en una
+                  línea nueva debajo de la tarea principal, anteponer un guion.
+                  Cada guion adicional baja un nivel (<i>--</i> para
+                  sub-subtarea).
+                </td>
+              </tr>
+              <tr>
+                <td><b>+</b>correo</td>
+                <td>
+                  Asignar la tarea a esa persona. Ej: <i>+lola@pffsc.com</i>
+                </td>
+              </tr>
+              <tr>
+                <td><b>::</b> notas</td>
+                <td>Todo lo que se escriba después se guarda en las notas</td>
+              </tr>
+            </table>
+
+            <h3>Importar y exportar</h3>
+            <p>
+              Se utiliza para <b>respaldar</b> los datos o <b>moverlos</b> a
+              otra cuenta.
+            </p>
+            <ul>
+              <li>
+                <b>Importar desde archivo CSV:</b> en
+                <span class="en">Settings → Import &amp; Export</span>, opción
+                <span class="en">Import from CSV</span>. Solo el título es
+                obligatorio; opcionalmente fecha, tags y notas. Útil para migrar
+                de otra herramienta o cargar muchas tareas.
+              </li>
+              <li>
+                <b>Importar desde Google Tasks:</b> traslada las tareas de
+                Google Tasks a GQueues. Es una importación única; después no se
+                sincroniza con Google Tasks.
+              </li>
+              <li>
+                <b>Exportar:</b> descarga un archivo con tus queues completas y
+                sus tareas (organizadas por categoría). Las queues de equipo
+                (<span class="en">Team</span>) y las compartidas se exportan
+                <b>por separado</b> de las personales.
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="sec" id="s7">
+          <summary>
+            <span class="num">7</span>Dentro de una tarea: fechas, repetición,
+            notas y comentarios <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              Para agregar enlaces, documentos, assignments, tags y demás
+              detalles a una tarea, colocar el cursor encima de ella (<span
+                class="en"
+                >hover</span
+              >): aparecerán los íconos correspondientes.
+            </p>
+            <h3><span class="en">Due date</span> (fecha de vencimiento)</h3>
+            <p>
+              Cada tarea recibe su fecha límite. Es lo que alimenta las Smart
+              Queues (sección 9).
+            </p>
+
+            <h3><span class="en">Repeat</span> (repetir)</h3>
+            <p>
+              Al definir la fecha, puede elegirse una
+              <b>frecuencia de repetición</b> (diaria, semanal, mensual). Aunque
+              la tarea se marque como terminada, <b>vuelve a generarse</b> en el
+              siguiente ciclo. Resulta útil para obligaciones recurrentes, como
+              declaraciones mensuales o revisiones periódicas.
+            </p>
+
+            <h3><span class="en">Notes</span> (notas)</h3>
+            <p>
+              Espacio para el detalle o contexto de la tarea. En
+              <span class="en">Settings → Tasks</span> es posible
+              <b>ocultar o mostrar</b> las notas y otras partes (assignments,
+              attachments, subtasks, tags), de modo que solo aparezca lo
+              relevante.
+            </p>
+
+            <h3><span class="en">Attachments</span> (adjuntos) y enlaces</h3>
+            <p>
+              A una tarea se le pueden <b>adjuntar documentos y archivos</b>,
+              vincular <b>archivos o carpetas de Google Drive</b> y agregar
+              <b>enlaces (links)</b> a páginas web o a un correo. Así toda la
+              documentación de un asunto (escritos, comprobantes, contratos)
+              queda junto al pendiente, sin tener que buscarla en otro lado. En
+              las queues de equipo, los adjuntos se comparten para que todos
+              consulten la misma información.
+            </p>
+
+            <h3>
+              <span class="en">Comments</span> (comentarios), clave para el
+              seguimiento
+            </h3>
+            <p>
+              Aquí se registra el <b>avance</b> de un proyecto. El principio
+              importante es <b>mantener la tarea viva</b> en lugar de abrir una
+              nueva cada vez. Conforme cambia la situación es posible:
+            </p>
+            <ul>
+              <li><b>Reasignar</b> la tarea a otra persona.</li>
+              <li><b>Cambiar el nombre</b> de la tarea.</li>
+              <li>Dejar <b>notas del progreso</b> en los comentarios.</li>
+            </ul>
+
+            <h3><span class="en">Snooze</span> (posponer)</h3>
+            <p>
+              Retira temporalmente una tarea de la vista activa;
+              <b>reaparece</b> en la fecha y hora elegidas. Lo pospuesto se
+              consulta en <span class="en">Snoozed</span>. Para recuperarla
+              antes, se usa <span class="en">Unsnooze now</span>.
+            </p>
+          </div>
+        </details>
+
+        <details class="sec" id="ssec">
+          <summary>
+            <span class="num">8</span>Sections y vista de tablero (Board view)
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              Las <span class="en">Sections</span> (secciones) agrupan tareas
+              dentro de una misma queue, bajo encabezados, sin necesidad de
+              crear subtareas ni nuevas listas.
+            </p>
+            <h3>Vista de lista y vista de tablero</h3>
+            <p>
+              Cualquier queue puede alternar entre dos vistas con un clic, desde
+              el control ubicado <b>junto al nombre de la queue</b>:
+            </p>
+            <ul>
+              <li>
+                <span class="en">List view</span> (lista): las secciones
+                aparecen como encabezados, una debajo de otra.
+              </li>
+              <li>
+                <span class="en">Board view</span> (tablero): las mismas
+                secciones se muestran como <b>columnas</b>, al estilo de un
+                tablero Kanban.
+              </li>
+            </ul>
+            <p>
+              Las secciones de la vista de lista corresponden a las columnas de
+              la vista de tablero, y viceversa.
+            </p>
+            <h3>Seguir el avance moviendo tareas</h3>
+            <p>
+              Las tareas se
+              <b>arrastran de una sección o columna a otra</b> para reflejar su
+              progreso. Ejemplos de columnas útiles en el despacho:
+              <span class="tag">Por hacer</span>
+              <span class="tag">En progreso</span>
+              <span class="tag">En revisión</span>
+              <span class="tag">Terminado</span>.
+            </p>
+            <figure
+              style="
+                margin: 14px 0;
+                background: #fcfdfe;
+                border: 1px solid var(--linea);
+                border-radius: 12px;
+                padding: 14px;
+              "
+            >
+              <svg
+                viewBox="0 0 760 300"
+                xmlns="http://www.w3.org/2000/svg"
+                role="img"
+                aria-label="Ilustración de la vista de tablero de GQueues"
+                style="width: 100%; height: auto; display: block"
+              >
+                <defs>
+                  <marker
+                    id="ah2"
+                    markerWidth="9"
+                    markerHeight="9"
+                    refX="7"
+                    refY="3"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                  >
+                    <path d="M0,0 L7,3 L0,6 Z" fill="#2a9d8f" />
+                  </marker>
+                </defs>
+                <rect
+                  x="20"
+                  y="20"
+                  width="220"
+                  height="260"
+                  rx="10"
+                  fill="#eef2f7"
+                  stroke="#d6deea"
+                />
+                <rect
+                  x="270"
+                  y="20"
+                  width="220"
+                  height="260"
+                  rx="10"
+                  fill="#eef2f7"
+                  stroke="#d6deea"
+                />
+                <rect
+                  x="520"
+                  y="20"
+                  width="220"
+                  height="260"
+                  rx="10"
+                  fill="#eef2f7"
+                  stroke="#d6deea"
+                />
+                <text
+                  x="36"
+                  y="46"
+                  font-family="sans-serif"
+                  font-size="14"
+                  font-weight="700"
+                  fill="#1d4e89"
+                >
+                  Por hacer
+                </text>
+                <text
+                  x="286"
+                  y="46"
+                  font-family="sans-serif"
+                  font-size="14"
+                  font-weight="700"
+                  fill="#1d4e89"
+                >
+                  En progreso
+                </text>
+                <text
+                  x="536"
+                  y="46"
+                  font-family="sans-serif"
+                  font-size="14"
+                  font-weight="700"
+                  fill="#1d4e89"
+                >
+                  En revisión
+                </text>
+                <rect
+                  x="32"
+                  y="64"
+                  width="196"
+                  height="34"
+                  rx="7"
+                  fill="#fff"
+                  stroke="#d6deea"
+                />
+                <text
+                  x="44"
+                  y="86"
+                  font-family="sans-serif"
+                  font-size="12.5"
+                  fill="#1f2937"
+                >
+                  Reunir comprobantes XML
+                </text>
+                <rect
+                  x="32"
+                  y="106"
+                  width="196"
+                  height="34"
+                  rx="7"
+                  fill="#fff"
+                  stroke="#d6deea"
+                />
+                <text
+                  x="44"
+                  y="128"
+                  font-family="sans-serif"
+                  font-size="12.5"
+                  fill="#1f2937"
+                >
+                  Borrador de escrito
+                </text>
+                <rect
+                  x="282"
+                  y="64"
+                  width="196"
+                  height="34"
+                  rx="7"
+                  fill="#fff"
+                  stroke="#d6deea"
+                />
+                <text
+                  x="294"
+                  y="86"
+                  font-family="sans-serif"
+                  font-size="12.5"
+                  fill="#1f2937"
+                >
+                  Contestar requerimiento
+                </text>
+                <rect
+                  x="532"
+                  y="64"
+                  width="196"
+                  height="34"
+                  rx="7"
+                  fill="#fff"
+                  stroke="#d6deea"
+                />
+                <text
+                  x="544"
+                  y="86"
+                  font-family="sans-serif"
+                  font-size="12.5"
+                  fill="#1f2937"
+                >
+                  Revisar propuesta
+                </text>
+                <path
+                  d="M232 81 C252 81 260 81 280 81"
+                  fill="none"
+                  stroke="#2a9d8f"
+                  stroke-width="2"
+                  marker-end="url(#ah2)"
+                />
+                <text
+                  x="232"
+                  y="56"
+                  font-family="sans-serif"
+                  font-size="11"
+                  font-weight="700"
+                  fill="#2a9d8f"
+                >
+                  arrastrar
+                </text>
+              </svg>
+              <figcaption
+                style="
+                  font-size: 12.5px;
+                  color: var(--suave);
+                  margin-top: 8px;
+                  text-align: center;
+                "
+              >
+                Vista de tablero (Board view): las tareas se arrastran entre
+                columnas para seguir su avance. Es una ilustración esquemática,
+                no una captura real.
+              </figcaption>
+            </figure>
+          </div>
+        </details>
+
+        <details class="sec" id="s8">
+          <summary>
+            <span class="num">9</span>Smart Queues: listas automáticas
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              Las <span class="en">Smart Queues</span>
+              <b>no son listas manuales</b>: buscan de forma automática todas
+              las tareas que cumplan un criterio en toda la cuenta.
+            </p>
+            <h3>Las predeterminadas</h3>
+            <ul>
+              <li>
+                <span class="en">Overdue</span>: vencidas, todo con fecha
+                anterior a hoy.
+              </li>
+              <li><span class="en">Due Today</span>: vence hoy.</li>
+              <li><span class="en">Next Week</span>: próxima semana.</li>
+              <li>
+                <span class="en">Next Actions</span>: muestra la
+                <b>primera tarea de cada queue</b>, como vista rápida de
+                prioridades.
+              </li>
+            </ul>
+            <h3>Crear una propia</h3>
+            <div class="pasos">
+              <h4>Pasos</h4>
+              <ol>
+                <li>
+                  Abrir el menú desplegable de Smart Queues en el panel
+                  izquierdo.
+                </li>
+                <li>Seleccionar <span class="en">Add Smart Queue</span>.</li>
+                <li>Asignarle un nombre.</li>
+                <li>
+                  Elegir los criterios (fecha, ubicación, assignments, tags).
+                  Por ejemplo, una Smart Queue de todo lo etiquetado
+                  <span class="tag">urgente</span>.
+                </li>
+              </ol>
+            </div>
+            <div class="tip">
+              Las predeterminadas también se pueden <b>editar</b> (menú →
+              <span class="en">Edit</span>): por ejemplo, dejar una que muestre
+              solo lo de hoy, o renombrarlas. De forma opcional, podrían
+              nombrarse en español: Vencidas, Hoy, Esta semana, Siguiente
+              acción.
+            </div>
+          </div>
+        </details>
+
+        <details class="sec" id="s9">
+          <summary>
+            <span class="num">10</span>Tags: etiquetas para filtrar
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              Los <span class="en">Tags</span> subcategorizan las tareas sin
+              importar en qué queue se encuentren. Una tarea puede tener varios.
+            </p>
+            <p>
+              Su utilidad principal es <b>filtrar</b>: combinados con una Smart
+              Queue permiten ver, por ejemplo, todo lo
+              <span class="tag">esperando_SAT</span> sin importar el cliente.
+            </p>
+            <p>
+              Los ejemplos para el despacho figuran en la sección 3 (tipo de
+              entregable, área fiscal, estatus y prioridad).
+            </p>
+          </div>
+        </details>
+
+        <details class="sec" id="s10">
+          <summary>
+            <span class="num">11</span>Trabajar en equipo
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <div class="grid2">
+              <div class="box">
+                <h4>
+                  <span class="en">Share a queue</span> · Compartir una lista
+                </h4>
+                <p>
+                  Para casos puntuales, como dar a un cliente acceso a una sola
+                  lista. Dos niveles:
+                </p>
+                <ul>
+                  <li>
+                    <span class="en">View Only</span>: permite consultar e
+                    imprimir la lista, sin editarla.
+                  </li>
+                  <li>
+                    <span class="en">Collaborator</span>: permite consultar y
+                    editar en tiempo real (agregar, editar, eliminar).
+                  </li>
+                </ul>
+              </div>
+              <div class="box">
+                <h4><span class="en">Team Queues</span> · Listas de equipo</h4>
+                <p>
+                  Para colaboración continua. Un <span class="en">Team</span> es
+                  un espacio de trabajo compartido: sus integrantes ven y
+                  gestionan el contenido según sus permisos. Puede tener desde
+                  dos personas hasta todo el despacho. Dentro de él se organizan
+                  las queues, que se comparten de forma automática con los
+                  miembros.
+                </p>
+              </div>
+            </div>
+            <h3>Roles dentro de un equipo</h3>
+            <p>
+              Cada miembro tiene un <span class="en">role</span> que define qué
+              puede hacer. GQueues ofrece seis niveles, de menor a mayor acceso:
+            </p>
+            <ul>
+              <li>
+                <b><span class="en">Viewer</span> (Observador):</b> solo puede
+                ver las tareas.
+              </li>
+              <li>
+                <b><span class="en">Commenter</span> (Comentarista):</b> ve y
+                comenta las tareas.
+              </li>
+              <li>
+                <b><span class="en">Completer</span>:</b> ve y marca tareas como
+                completadas, sin editarlas ni agregar nuevas.
+              </li>
+              <li>
+                <b><span class="en">Collaborator</span> (Colaborador):</b> ve,
+                comenta, completa y edita por completo las tareas.
+              </li>
+              <li>
+                <b><span class="en">Manager</span> (Gerente):</b> acceso total a
+                tareas y sections; además puede agregar, reordenar y eliminar
+                queues del equipo.
+              </li>
+              <li>
+                <b><span class="en">Owner</span> (Dueño):</b> todo lo anterior,
+                más la configuración del equipo (miembros, permisos, tags y
+                calendario). Solo hay un owner a la vez.
+              </li>
+            </ul>
+            <h3>
+              <span class="en">Assignments</span> · Asignaciones (forma
+              recomendada de delegar)
+            </h3>
+            <p>
+              Al asignar una tarea, <b>solo esa tarea</b> se comparte con la
+              persona, que recibe una notificación. Funciona en queues
+              compartidas o de equipo.
+            </p>
+            <div class="pro">
+              <h4>Ventajas de las asignaciones</h4>
+              <ul>
+                <li>Comparte únicamente la tarea asignada.</li>
+                <li>
+                  La persona no necesita pertenecer al equipo para recibir una
+                  asignación.
+                </li>
+                <li>
+                  Cada persona dispone de una vista única,
+                  <span class="en">Assignments</span>, que reúne todo lo
+                  asignado desde cualquier lista.
+                </li>
+              </ul>
+            </div>
+            <p>
+              De forma predeterminada, al asignar una tarea desde una lista
+              privada, la persona ve <b>únicamente esa tarea</b> en su
+              <span class="en">Assignments</span>; el resto de la lista, las
+              subtareas y la tarea principal permanecen privados. Dar acceso a
+              ese contexto adicional es <b>opcional</b>: para ello se comparte
+              la queue o se agrega a la persona al Team.
+            </p>
+            <h3>Opción: una queue por persona</h3>
+            <p>
+              Dentro de un Team también puede crearse una
+              <span class="en">Queue</span> por persona, para asignar a cada
+              integrante sus tareas en un espacio propio. Resulta útil cuando se
+              desea un lugar permanente con todos los pendientes de alguien,
+              visible para el equipo.
+            </p>
+            <div class="tip">
+              <b>Recomendación para PFF:</b> organizar las listas por cliente o
+              asunto y delegar el trabajo mediante
+              <span class="en">Assignments</span>. La estructura se mantiene
+              ordenada y el control de lo que se comparte es más preciso.
+            </div>
+            <h3>¿Hace falta plan de pago para colaborar?</h3>
+            <p>
+              Quien <b>comparte</b> una queue debe contar con plan de pago. En
+              cambio, las personas invitadas (por ejemplo, un cliente) pueden
+              <b>consultar y editar</b> una queue compartida, ya sea como
+              <span class="en">View Only</span> o
+              <span class="en">Collaborator</span>,
+              <b>sin necesidad de un plan de pago propio</b>. Los cambios de un
+              colaborador se reflejan en tiempo real.
+            </p>
+          </div>
+        </details>
+
+        <details class="sec" id="s11">
+          <summary>
+            <span class="num">12</span>Privacidad <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <div class="grid2">
+              <div class="pro">
+                <h4>🔒 Privado</h4>
+                <ul>
+                  <li><span class="en">Inbox</span></li>
+                  <li><span class="en">My Queues</span></li>
+                  <li><span class="en">Smart Queues</span></li>
+                  <li>
+                    <span class="en">Tags</span> y
+                    <span class="en">Snoozed</span>
+                  </li>
+                </ul>
+              </div>
+              <div
+                class="box"
+                style="background: var(--enbg); border-color: #bfe3dd"
+              >
+                <h4 style="color: var(--en)">
+                  👥 Visible para otros (solo al compartir)
+                </h4>
+                <ul>
+                  <li>
+                    <b>Shared queues:</b> accesibles para las personas invitadas
+                    (View Only o Collaborator).
+                  </li>
+                  <li>
+                    <b>Team Queues:</b> accesibles para los miembros del Team
+                    según su rol.
+                  </li>
+                  <li>
+                    <b>Assignments:</b> la persona accede
+                    <b>solo a la tarea</b> asignada, no al resto.
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p>
+              Toda la información es privada de forma predeterminada. Ninguna
+              otra persona accede al Inbox ni a las My Queues salvo que se
+              comparta de manera explícita.
+            </p>
+          </div>
+        </details>
+
+        <details class="sec" id="s12">
+          <summary>
+            <span class="num">13</span>Convertir correos en tareas
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              Cuando un pendiente llega por correo electrónico, GQueues permite
+              convertirlo en una tarea sin copiar y pegar. Existen varias
+              formas:
+            </p>
+            <ol>
+              <li>
+                <b>Dirección de correo única por queue.</b> Cada
+                <span class="en">Queue</span> cuenta con su propio correo. Al
+                enviar o reenviar un mensaje a esa dirección, desde cualquier
+                cuenta, se crea una tarea en esa lista. El
+                <b>asunto del correo se convierte en el título</b> de la tarea y
+                el <b>cuerpo del mensaje en sus notas</b>.
+              </li>
+              <li>
+                <b>Dirección del Inbox.</b> El
+                <span class="en">Inbox</span> también tiene su propio correo,
+                para enviar pendientes directamente ahí y clasificarlos después.
+              </li>
+              <li>
+                <b>Reenvío automático con filtros de Gmail.</b> Un filtro
+                reenvía de forma automática ciertos correos a la dirección de
+                GQueues, y la tarea se crea sin necesidad de abrir el mensaje.
+                Útil para correos recurrentes (por ejemplo, avisos de un cliente
+                o del SAT).
+              </li>
+              <li>
+                <b>Gmail Add-on / extensión.</b> Convierte un correo en tarea
+                directamente desde Gmail, vinculando o adjuntando el mensaje a
+                la tarea (ver sección 14).
+              </li>
+            </ol>
+            <div class="pasos">
+              <h4>Cómo localizar el correo de una queue</h4>
+              <ol>
+                <li>
+                  Abrir la lista y hacer clic en el ícono <b>ⓘ</b> para mostrar
+                  el <span class="en">Queue Info Panel</span>.
+                </li>
+                <li>
+                  Seleccionar <span class="en">Email tasks to this queue</span>.
+                </li>
+                <li>
+                  Copiar la dirección que aparece y, de preferencia, guardarla
+                  como contacto para tenerla a la mano.
+                </li>
+              </ol>
+            </div>
+            <div class="pasos">
+              <h4>
+                Cómo reenviar correos de forma automática (filtro de Gmail)
+              </h4>
+              <ol>
+                <li>
+                  Copiar la dirección de la queue o del Inbox (pasos de arriba).
+                </li>
+                <li>
+                  En Gmail, hacer clic en el ícono de <b>Configuración</b> ⚙️ →
+                  <b>Ver toda la configuración</b> → pestaña
+                  <b>Filtros y direcciones bloqueadas</b> →
+                  <b>Crear un filtro</b>.
+                </li>
+                <li>
+                  Definir el criterio. En <b>De:</b> va el remitente cuyos
+                  correos se quieren convertir en tareas. El campo
+                  <b>Para:</b> puede dejarse vacío, o usar el propio correo si
+                  se desea limitar el filtro a los mensajes dirigidos a uno
+                  mismo.
+                </li>
+                <li>
+                  Pulsar <b>Crear filtro</b> y marcar la acción
+                  <b>Reenviar a</b>, eligiendo la dirección de GQueues. Si esa
+                  dirección no aparece en la lista, primero se agrega en
+                  <b
+                    >Configuración ⚙️ → Ver toda la configuración → Reenvío y
+                    correo POP/IMAP → Añadir una dirección de reenvío</b
+                  >.
+                </li>
+              </ol>
+            </div>
+            <div class="tip">
+              Recomendación: enviar al <span class="en">Inbox</span> lo que aún
+              no esté clasificado, y a la dirección de una queue específica lo
+              que ya tiene un destino claro (por ejemplo, un cliente).
+            </div>
+          </div>
+        </details>
+
+        <details class="sec" id="s13">
+          <summary>
+            <span class="num">14</span>Apps y extensiones
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              Un complemento (add-on) o una extensión integran GQueues dentro de
+              otras aplicaciones (Gmail, Calendar, Drive o el navegador), de
+              modo que no sea necesario cambiar de ventana.
+            </p>
+
+            <h3>
+              <span class="en">Google Workspace Add-on</span> (el complemento)
+            </h3>
+            <p>
+              <b>Qué hace:</b> coloca un panel de GQueues en la
+              <b>barra lateral derecha</b> de Gmail, Google Calendar y Google
+              Drive. Funciona en computadora y en celular, y en cualquier
+              navegador. Su comportamiento en cada aplicación:
+            </p>
+            <ul>
+              <li>
+                <b>En Gmail:</b> crea una tarea a partir de un correo. Ofrece
+                las opciones
+                <span class="en">Attach current email</span> (adjuntar el correo
+                actual) y
+                <span class="en">Link to current email</span> (vincular el
+                correo actual), de modo que el mensaje queda accesible desde la
+                tarea.
+              </li>
+              <li>
+                <b>En Google Calendar:</b> muestra las tareas creadas en GQueues
+                que tienen una fecha específica, y permite editarlas o marcarlas
+                como completadas sin salir del calendario.
+              </li>
+              <li>
+                <b>En Google Drive:</b> permite adjuntar archivos o carpetas de
+                Drive a una tarea, de modo que la documentación queda ligada al
+                pendiente. También permite buscar o crear tareas desde Drive.
+              </li>
+            </ul>
+            <p>
+              Las tareas nuevas se envían al <span class="en">Inbox</span> de
+              forma predeterminada, aunque puede configurarse otra queue como
+              destino.
+            </p>
+
+            <h3>Sincronización con Google Calendar</h3>
+            <p>
+              Además del panel, GQueues puede <b>sincronizarse</b> con Google
+              Calendar. Una vez activada la sincronización, aparece un
+              <b>calendario nuevo llamado "GQueues"</b> dentro de Google
+              Calendar, donde se muestran como eventos
+              <b>todas las tareas que tienen fecha</b> (no las queues completas,
+              solo las tareas con <span class="en">Due date</span>). La
+              sincronización es <b>en ambos sentidos</b>: un cambio en el
+              calendario se refleja en GQueues y viceversa. Cada
+              <span class="en">Team</span> puede tener su propio calendario, con
+              color distinto, para diferenciar el trabajo.
+            </p>
+            <div class="pasos">
+              <h4>Cómo activar la sincronización</h4>
+              <ol>
+                <li>
+                  En GQueues, abrir
+                  <span class="en">Settings</span> (Configuración).
+                </li>
+                <li>Entrar a la pestaña <span class="en">Calendar</span>.</li>
+                <li>
+                  Seleccionar
+                  <span class="en">Sync with Google Calendar</span> y autorizar
+                  el acceso.
+                </li>
+              </ol>
+            </div>
+            <div class="pasos">
+              <h4>
+                Cómo hacer que un evento de Google Calendar aparezca en GQueues
+              </h4>
+              <ol>
+                <li>
+                  Hacer doble clic en el evento dentro de Google Calendar.
+                </li>
+                <li>
+                  En el menú desplegable de calendario 📅, cambiarlo al
+                  calendario <b>GQueues</b>.
+                </li>
+                <li>El evento se convierte en una tarea visible en GQueues.</li>
+              </ol>
+            </div>
+            <div class="pasos">
+              <h4>Cómo instalarlo</h4>
+              <ol>
+                <li>Abrir el Google Workspace Marketplace.</li>
+                <li>Buscar "GQueues".</li>
+                <li>
+                  Pulsar <b>Instalar</b> y autorizar el acceso a la cuenta de
+                  Google.
+                </li>
+                <li>
+                  El panel de GQueues aparecerá en la barra lateral derecha de
+                  Gmail, Calendar y Drive.
+                </li>
+              </ol>
+            </div>
+
+            <h3>
+              <span class="en">Chrome Extension</span> (extensión del navegador)
+            </h3>
+            <p>
+              <b>Qué hace:</b> agrega GQueues al navegador Chrome para crear
+              tareas desde <b>cualquier página web</b>, además de integrarse con
+              Gmail y Google Calendar, sin salir de lo que se esté viendo.
+            </p>
+            <div class="pasos">
+              <h4>Cómo instalarla</h4>
+              <ol>
+                <li>Entrar a la Chrome Web Store.</li>
+                <li>Buscar "GQueues".</li>
+                <li>Pulsar <b>Add to Chrome</b>.</li>
+                <li>Confirmar con <b>Add extension</b>.</li>
+              </ol>
+            </div>
+            <div class="pasos">
+              <h4>
+                Cómo fijarla en la barra de Chrome (para acceder desde cualquier
+                sitio)
+              </h4>
+              <ol>
+                <li>
+                  Hacer clic en el ícono de extensiones 🧩, en la parte superior
+                  derecha de Chrome (la <span class="en">toolbar</span>).
+                </li>
+                <li>Localizar <b>GQueues</b> en la lista.</li>
+                <li>
+                  Pulsar el ícono de <b>pin (📌)</b> que aparece a su lado.
+                </li>
+                <li>
+                  El ícono de GQueues queda fijo en la barra y visible en todo
+                  momento.
+                </li>
+              </ol>
+            </div>
+
+            <h3>¿Add-on o Chrome Extension? ¿Cuál usar?</h3>
+            <table>
+              <tr>
+                <th></th>
+                <th>Google Workspace Add-on</th>
+                <th>Chrome Extension</th>
+              </tr>
+              <tr>
+                <td><b>Dónde funciona</b></td>
+                <td>Gmail, Calendar y Drive</td>
+                <td>Cualquier página web (y Gmail/Calendar)</td>
+              </tr>
+              <tr>
+                <td><b>Navegador</b></td>
+                <td>Cualquiera</td>
+                <td>Solo Chrome</td>
+              </tr>
+              <tr>
+                <td><b>Celular</b></td>
+                <td>Sí</td>
+                <td>No</td>
+              </tr>
+            </table>
+            <div class="tip">
+              <b>Cuál usar:</b> para la mayoría del despacho basta el
+              <span class="en">Google Workspace Add-on</span>, porque cubre
+              Gmail, Calendar y Drive en cualquier navegador y también en el
+              celular. La <span class="en">Chrome Extension</span> es un
+              complemento adicional para quien trabaja siempre en Chrome y desea
+              funciones integradas directamente en la página. Pueden usarse
+              ambas a la vez.
+            </div>
+
+            <h3>📱 Apps para celular</h3>
+            <p>Para gestionar tareas desde el teléfono o la tablet:</p>
+            <div class="btns">
+              <a
+                class="btn"
+                href="https://apps.apple.com/us/app/gqueues/id658916407"
+                target="_blank"
+                rel="noopener"
+                >📲 Descargar para iPhone / iPad (App Store)</a
+              >
+              <a
+                class="btn green"
+                href="https://play.google.com/store/apps/details?id=com.gqueues.android.app"
+                target="_blank"
+                rel="noopener"
+                >🤖 Descargar para Android (Google Play)</a
+              >
+            </div>
+          </div>
+        </details>
+
+        <details class="sec" id="s14">
+          <summary>
+            <span class="num">15</span>Atajos de teclado
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <p>
+              Los atajos de teclado agilizan la captura y la organización de las
+              tareas. Funcionan en la <b>versión de computadora</b> de GQueues
+              (el sitio web), no en las apps de celular ni en el panel del
+              add-on.
+            </p>
+            <table>
+              <tr>
+                <th>Acción</th>
+                <th>Atajo</th>
+              </tr>
+              <tr>
+                <td>
+                  Abrir el <span class="en">Command Palette</span> (buscar y
+                  ejecutar acciones)
+                </td>
+                <td><b>Ctrl + K</b> (Cmd + K en Mac)</td>
+              </tr>
+              <tr>
+                <td>Ver la lista completa de atajos</td>
+                <td>Teclear <b>?</b></td>
+              </tr>
+              <tr>
+                <td>Crear una tarea nueva (estando en la última)</td>
+                <td><b>Tab</b></td>
+              </tr>
+              <tr>
+                <td>Cerrar ventanas emergentes (tags, fecha, assignments)</td>
+                <td><b>Esc</b></td>
+              </tr>
+              <tr>
+                <td>Salto de línea dentro de Notes</td>
+                <td><b>Shift + Enter</b></td>
+              </tr>
+            </table>
+            <div class="pasos">
+              <h4>El Command Palette (lo más práctico)</h4>
+              <p>Es un buscador de acciones: evita memorizar atajos. Pasos:</p>
+              <ol>
+                <li>Pulsar <b>Ctrl + K</b> (o <b>Cmd + K</b> en Mac).</li>
+                <li>
+                  Escribir la acción que se busca (por ejemplo, crear tarea o ir
+                  a una queue).
+                </li>
+                <li>Navegar con las flechas y confirmar con <b>Enter</b>.</li>
+              </ol>
+            </div>
+            <div class="tip">
+              En Mac, donde una guía en inglés indique <b>Ctrl</b>, corresponde
+              a la tecla <b>Cmd (⌘)</b>.
+            </div>
+          </div>
+        </details>
+
+        <details class="sec" id="s15">
+          <summary>
+            <span class="num">16</span>El flujo ideal de trabajo
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <div class="flow">
+              <div class="step">
+                <div class="dot">1</div>
+                <div class="c">
+                  <b>Brain dump → Inbox.</b> Registrar en el
+                  <span class="en">Inbox</span> todos los pendientes, sin
+                  clasificarlos.
+                </div>
+              </div>
+              <div class="step">
+                <div class="dot">2</div>
+                <div class="c">
+                  <b>Arrastrar → Queues.</b> Mover cada tarea a la
+                  <span class="en">Queue</span> (cliente o tema) que
+                  corresponde.
+                </div>
+              </div>
+              <div class="step">
+                <div class="dot">3</div>
+                <div class="c">
+                  <b>Asignar fechas.</b> Definir la
+                  <span class="en">Due date</span> de cada tarea, y la
+                  repetición si aplica.
+                </div>
+              </div>
+              <div class="step">
+                <div class="dot">4</div>
+                <div class="c">
+                  <b>Delegar.</b> Compartir o asignar donde corresponda (<span
+                    class="en"
+                    >Team Queues</span
+                  >
+                  y <span class="en">Assignments</span>).
+                </div>
+              </div>
+              <div class="step">
+                <div class="dot">5</div>
+                <div class="c">
+                  <b>Etiquetar.</b> Agregar <span class="en">Tags</span> para
+                  facilitar el filtrado posterior.
+                </div>
+              </div>
+            </div>
+            <div class="loop">
+              🔁 <b>Rutina diaria:</b> revisar el calendario, revisar GQueues
+              (la totalidad de los pendientes), elegir de forma consciente qué
+              se realiza hoy y reprogramar el resto a una fecha futura.
+            </div>
+          </div>
+        </details>
+
+        <details class="sec" id="s16">
+          <summary>
+            <span class="num">17</span>Recursos y soporte
+            <span class="chev">›</span>
+          </summary>
+          <div class="body">
+            <ul>
+              <li>
+                <b>Webinar (grabación):</b>
+                <a
+                  href="https://us02web.zoom.us/rec/play/28bh6NxJ6lBxFzFzTh9B58x5-e7UK2m79FZbcClz2C-llAoIAPuGNyYm1i2z4nR7zxV6l_Vb9Ku0XPM.lqR2_Vov23q1URra?accessLevel=meeting&canPlayFromShare=true&from=share_recording_detail&continueMode=true&oldStyle=true&componentName=rec-play&originRequestUrl=https%3A%2F%2Fus02web.zoom.us%2Frec%2Fshare%2FHnoJYQIVCJEpnjdlw_KukqaDPHAFwwW7qlxegP6RZHs78Nh1A4zjlG6zKlIf8AkB.llfRhe49yMlnnkXv"
+                  target="_blank"
+                  rel="noopener"
+                  >Ver la grabación en Zoom</a
+                >
+              </li>
+              <li>
+                <b>Centro de ayuda de GQueues:</b>
+                <a
+                  href="https://learn.gqueues.com/"
+                  target="_blank"
+                  rel="noopener"
+                  >learn.gqueues.com</a
+                >
+                (en inglés)
+              </li>
+              <li>
+                <b>Soporte de GQueues (correo):</b>
+                <a href="mailto:support@gqueues.com">support@gqueues.com</a>
+              </li>
+              <li>
+                <b>Chat de soporte de GQueues:</b> el ícono azul de conversación
+                (💬) en la esquina inferior derecha de la app abre el chat de
+                ayuda.
+              </li>
+            </ul>
+          </div>
+        </details>
+      </main>
+    </div>
+
+    <footer>
+      <div class="support">
+        <h3>¿Dudas sobre GQueues en PFF?</h3>
+        <p>
+          Para cualquier consulta sobre el uso de GQueues en el despacho,
+          escribir al soporte interno.
+        </p>
+        <a
+          class="btn alt"
+          href="mailto:agalan@pffsc.com?subject=Duda%20sobre%20GQueues%20(PFF)&body=Hola%20Ana%2C%0A%0AMi%20duda%20sobre%20GQueues%20es%3A%0A%0A"
+          >✉️ Enviar consulta a Ana (agalan@pffsc.com)</a
+        >
+      </div>
+      <p
+        style="
+          text-align: center;
+          color: var(--suave);
+          font-size: 12.5px;
+          margin-top: 16px;
+        "
+      >
+        Última actualización: 19 de junio de 2026
+      </p>
+    </footer>
+
+    <script>
+      (function () {
+        var search = document.getElementById("search");
+        if (!search) return;
+        var secs = Array.prototype.slice.call(
+          document.querySelectorAll("details.sec"),
+        );
+        var norm = function (s) {
+          return (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+        };
+        var run = function () {
+          var q = norm(search.value.trim());
+          secs.forEach(function (s) {
+            var hit = norm(s.textContent).indexOf(q) !== -1;
+            s.classList.toggle("no-match", !!q && !hit);
+            if (q && hit) s.open = true;
+            if (!q) s.open = s.id === "s0" || s.id === "s1";
+          });
+        };
+        search.addEventListener("input", run);
+        search.addEventListener("keyup", run);
+        document.querySelectorAll("nav.toc a").forEach(function (a) {
+          a.addEventListener("click", function (e) {
+            e.preventDefault();
+            var t = document.querySelector(a.getAttribute("href"));
+            if (t) {
+              t.open = true;
+              t.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

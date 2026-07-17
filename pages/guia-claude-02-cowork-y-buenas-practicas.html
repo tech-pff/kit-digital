@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills, tokens, Cowork y buenas prácticas · PFF</title>
+<style>
+  :root{
+    --azul:#13315c; --azul2:#1d4e89; --acento:#2a9d8f; --acento2:#e9c46a;
+    --bg:#f5f7fa; --card:#ffffff; --texto:#1f2937; --suave:#5b6470; --linea:#e3e8ef;
+    --en:#0b6e6e; --enbg:#e6f4f1; --aviso:#fff7e6; --avisob:#e0a800;
+    --si:#eaf7ef; --sib:#1e8449; --no:#fdecec; --nob:#c0392b;
+    --sombra:0 1px 3px rgba(16,38,73,.08),0 6px 20px rgba(16,38,73,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:transparent}
+  body{overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--texto);line-height:1.6;font-size:16px}
+  .widget{height:100%;overflow-y:auto;max-width:920px;margin:0 auto;padding:2px 14px 22px}
+  a{color:var(--azul2)}
+  .whead{background:linear-gradient(135deg,var(--azul),var(--azul2));color:#fff;border-radius:14px;padding:16px 20px;margin:6px 0 14px}
+  .whead h1{margin:0;font-size:21px;letter-spacing:.2px}
+  .whead .sub{font-size:13.5px;opacity:.9;margin-top:2px}
+  .searchbar{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:blur(3px);padding:8px 0 10px;margin-bottom:8px}
+  .search{width:100%;padding:11px 96px 11px 14px;border:1px solid var(--linea);border-radius:10px;font-size:14.5px;background:#fff}
+  .search:focus{outline:none;border-color:var(--acento);box-shadow:0 0 0 3px rgba(42,157,143,.15)}
+  .scount{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12.5px;color:var(--suave);pointer-events:none}
+  mark.hit{background:var(--acento2);color:#3a2f00;border-radius:3px;padding:0 1px}
+  mark.hit.cur{background:#f4a261;box-shadow:0 0 0 2px rgba(244,162,97,.5)}
+  .grouptitle{font-size:16px;font-weight:800;color:var(--azul);letter-spacing:.02em;margin:24px 4px 10px;padding-bottom:6px;border-bottom:2px solid var(--acento)}
+  details.sec{background:var(--card);border:1px solid var(--linea);border-radius:14px;margin-bottom:14px;box-shadow:var(--sombra);overflow:hidden}
+  details.sec>summary{list-style:none;cursor:pointer;padding:15px 20px;font-size:17px;font-weight:700;color:var(--azul);display:flex;align-items:flex-start;gap:10px;user-select:none}
+  details.sec>summary::-webkit-details-marker{display:none}
+  details.sec>summary .num{background:var(--azul);color:#fff;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 auto}
+  details.sec>summary .chev{margin-left:auto;transition:transform .2s;color:var(--suave);font-size:20px}
+  details.sec[open]>summary .chev{transform:rotate(90deg)}
+  details.sec[open]>summary{border-bottom:1px solid var(--linea)}
+  .body{padding:8px 22px 20px}
+  h3{color:var(--azul2);font-size:15.5px;margin:16px 0 6px}
+  p{margin:.5em 0} ul,ol{margin:.4em 0 .6em;padding-left:22px} li{margin:.3em 0}
+  .lead{background:var(--card);border:1px solid var(--linea);border-left:4px solid var(--acento);border-radius:12px;padding:14px 18px;box-shadow:var(--sombra);margin-bottom:16px;font-size:14.5px}
+  .lead p{margin:.4em 0}
+  .en{background:var(--enbg);color:var(--en);border:1px solid #bfe3dd;border-radius:6px;padding:1px 7px;font-weight:700;font-size:.9em;white-space:nowrap}
+  .tip{background:var(--enbg);border:1px solid #bfe3dd;border-left:4px solid var(--acento);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+  .warn{background:var(--aviso);border:1px solid #f0d999;border-left:4px solid var(--avisob);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+  .nota{background:#fbfaf5;border:1px dashed var(--avisob);border-radius:12px;padding:12px 16px;margin:12px 0;color:#7a6320;font-size:14px}
+  .nota b{color:#6b5512}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+  .box{border:1px solid var(--linea);border-radius:12px;padding:14px 16px;background:#fcfdfe}
+  .box h4{margin:0 0 6px;color:var(--azul)}
+  .pro,.con{border-radius:12px;padding:14px 16px}
+  .pro{background:var(--si);border:1px solid #bfe4cd} .pro h4{color:var(--sib);margin:0 0 6px}
+  .con{background:var(--no);border:1px solid #f1c7c2} .con h4{color:var(--nob);margin:0 0 6px}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:14.5px}
+  th,td{border:1px solid var(--linea);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--azul);color:#fff;font-weight:600}
+  tr:nth-child(even) td{background:#fafbfc}
+  .tag{display:inline-block;background:#eef1f6;border:1px solid var(--linea);border-radius:20px;padding:2px 11px;font-size:13px;margin:2px 3px 2px 0;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .pasos{background:#fcfdfe;border:1px solid var(--linea);border-radius:10px;padding:12px 18px;margin:10px 0}
+  .pasos h4{margin:2px 0 6px;color:var(--azul)}
+  .path{display:inline-block;background:#eef2f8;border:1px solid #d7e0ee;border-radius:8px;padding:3px 10px;font-size:13px;color:var(--azul);font-family:ui-monospace,Menlo,Consolas,monospace;margin:2px 0}
+  .path b{color:var(--acento);font-weight:700;padding:0 3px}
+  .rec{background:#f4faf8;border:1px solid #cceae3;border-radius:10px;padding:10px 16px;margin:10px 0}
+  .rec h4{margin:2px 0 6px;color:var(--sib)}
+  .fname{display:inline-block;background:#0f1b2d;color:#e8eef7;border-radius:8px;padding:2px 10px;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .prompt{background:#0f1b2d;color:#e8eef7;border-radius:10px;padding:12px 14px;margin:6px 0 4px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.55;white-space:pre-wrap}
+  .ptitle{font-weight:700;color:var(--azul2);margin:16px 0 4px;font-size:14.5px}
+  .hint{font-size:12.5px;color:var(--suave);margin:2px 0 10px}
+  .causa{font-size:14.5px} .causa b{color:var(--nob)}
+  .sol{background:var(--si);border:1px solid #bfe4cd;border-left:4px solid var(--sib);border-radius:10px;padding:10px 14px;margin:8px 0 0;font-size:14.5px}
+  .sol b{color:var(--sib)}
+  code{background:#eef1f6;border:1px solid var(--linea);border-radius:5px;padding:0 5px;font-size:.9em}
+  .btns{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--azul2);color:#fff;text-decoration:none;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px}
+  .btn.green{background:var(--acento)}
+  @media(max-width:640px){ .grid2{grid-template-columns:1fr} table{font-size:13.5px} }
+
+  .toc{background:var(--card);border:1px solid var(--linea);border-radius:12px;box-shadow:var(--sombra);padding:10px 14px;margin:0 0 16px}
+  .toc .toch{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--suave);margin:0 0 8px;font-weight:700}
+  .toc ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .toc li{margin:0}
+  .toc a{display:inline-block;text-decoration:none;color:var(--azul);background:#eef2f8;border:1px solid #d7e0ee;border-radius:20px;padding:4px 11px;font-size:13px}
+  .toc a:hover{background:var(--acento);color:#fff;border-color:var(--acento)}
+  .toc .tocgroup{width:100%;font-size:11px;font-weight:800;color:var(--acento);text-transform:uppercase;letter-spacing:.05em;margin:8px 0 0}
+  details.sec{scroll-margin-top:66px}
+  .letra{scroll-margin-top:66px}
+
+.sitenav{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:rgba(255,255,255,.96);backdrop-filter:blur(3px);border-bottom:1px solid var(--linea);padding:10px 4px;margin-bottom:8px}
+.sitenav a{color:var(--azul2);text-decoration:none;font-size:14px;font-weight:600}
+.sitenav a:hover{text-decoration:underline}
+.sitenav .sitenav-home{color:var(--azul);font-weight:700}
+.sitenav a.active{color:var(--acento)}
+.sitenav-sub{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin:2px 0 12px;padding:0 2px}
+.sitenav-sub a{color:var(--suave);text-decoration:none;font-weight:600}
+.sitenav-sub a.active{color:var(--acento)}
+.sitenav-sub a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="widget">
+  <nav class="sitenav">
+    <a class="sitenav-home" href="../index.html">← Kit Digital</a>
+    <a href="gqueues.html">GQueues</a>
+    <a class="active" href="guia-claude-01-introduccion.html">Guía de Claude</a>
+    <a href="feedback.html">Feedback</a>
+  </nav>
+  <div class="sitenav-sub">
+    <a href="guia-claude-01-introduccion.html">1. Introducción</a>
+    <a class="active" href="guia-claude-02-cowork-y-buenas-practicas.html">2. Cowork y buenas prácticas</a>
+    <a href="guia-claude-03-skills-pff.html">3. Skills de PFF</a>
+    <a href="guia-claude-04-glosario.html">4. Glosario</a>
+  </div>
+  <div class="whead">
+    <h1>Skills, tokens, Cowork y buenas prácticas</h1>
+    <div class="sub">Claude para PFF · Guía práctica del despacho</div>
+  </div>
+  <div class="searchbar">
+    <input class="search" id="search" type="search" placeholder="Buscar en esta página…" autocomplete="off">
+    <span class="scount" id="scount"></span>
+  </div>
+  <nav class="toc" id="toc" aria-label="Indice de la pagina"></nav>
+  <div id="contenido">
+<details class="sec" open>
+      <summary><span class="num">1</span>Skills (habilidades) <span class="chev">›</span></summary>
+      <div class="body">
+        <h3>¿Qué es una skill?</h3>
+        <p>Una <b>skill</b> es una capacidad especializada —un "instructivo" empaquetado, a veces con herramientas— que Claude carga <b>solo cuando la tarea lo amerita</b>. En lugar de cargar todo siempre, Claude reconoce que tu pedido encaja con una skill y la usa.</p>
+        <p>Piénsalo como un colega que tiene manuales guardados en un cajón: no los lee todos a diario, pero saca el correcto cuando llega el caso indicado.</p>
+
+        <h3>Skills que ya vienen incluidas</h3>
+        <p>Las más útiles para el despacho generan documentos reales y con buen formato:</p>
+        <p>
+          <span class="tag">docx</span> Documentos de Word (memos, escritos, cartas, plantillas)
+          <span class="tag">xlsx</span> Hojas de Excel con fórmulas, tablas y gráficas
+          <span class="tag">pptx</span> Presentaciones de PowerPoint
+          <span class="tag">pdf</span> Crear, leer, combinar, dividir y llenar PDFs
+        </p>
+
+        <h3>¿Cómo se activan?</h3>
+        <ul>
+          <li><b>Automáticamente:</b> si le pides "hazme un Excel con…", Claude detecta que aplica la skill de Excel y la usa sin que tengas que indicarlo.</li>
+          <li><b>A propósito:</b> puedes nombrarla directamente, p. ej. "usa la skill de PDF para combinar estos archivos".</li>
+        </ul>
+
+        <h3>Skill, conector, plugin y extensión: ¿cuál es cuál?</h3>
+        <p>Es fácil confundirlos. La comparación completa —con extensiones incluidas y dónde vive cada uno en la configuración— está en la página <b>Configuración de Claude</b>, en "Extensiones, habilidades, conectores y plugins".</p>
+
+        <div class="tip"><b>Tip.</b> No tienes que memorizar qué skills existen. Describe tu objetivo con claridad y Claude elige la herramienta. El catálogo (en su propia página) está para que sepas qué hay disponible.</div>
+
+        <div class="nota"><b>Nota — espacio para notas:</b> aquí iremos agregando skills propias de PFF (p. ej. plantillas de escritos, formatos del despacho) conforme las creemos.</div>
+      </div>
+    </details>
+<details class="sec">
+      <summary><span class="num">2</span>Cómo ahorrar tokens <span class="chev">›</span></summary>
+      <div class="body">
+        <h3>¿Qué es un token y por qué importa?</h3>
+        <p>Un <b>token</b> es la unidad con la que Claude mide el texto: aproximadamente <b>¾ de una palabra</b> en español. Todo lo que entra (tu pregunta, los archivos, el historial) y todo lo que sale (la respuesta) cuenta como tokens. El plan tiene una cuota de uso, así que gastar bien los tokens significa poder hacer más sin toparte con límites.</p>
+
+        <div class="warn"><b>Importante.</b> Cada vez que escribes en un chat, Claude vuelve a leer <b>toda la conversación anterior</b> para responder. Mientras más larga la conversación, más tokens consume cada nuevo mensaje. Una conversación muy larga se vuelve cara aunque tu última pregunta sea corta.</div>
+
+        <h3>Hábitos que ahorran</h3>
+        <div class="grid2">
+          <div class="pro">
+            <h4>Sí conviene</h4>
+            <ul>
+              <li><b>Abrir un chat nuevo</b> para cada tema o asunto distinto.</li>
+              <li>Usar <b>proyectos</b> para el contexto que se repite, en vez de re-pegarlo en cada chat.</li>
+              <li>Subir o pegar <b>solo la parte del documento</b> que de verdad importa.</li>
+              <li>Pedir respuestas <b>concretas</b> ("dame solo la conclusión", "en 5 puntos").</li>
+              <li>Cerrar un tema y empezar de cero cuando cambies de asunto.</li>
+            </ul>
+          </div>
+          <div class="con">
+            <h4>Mejor evitar</h4>
+            <ul>
+              <li>Usar <b>un solo chat eterno</b> para todo el trabajo de la semana.</li>
+              <li>Volver a <b>adjuntar el mismo archivo</b> una y otra vez.</li>
+              <li>Pegar documentos enormes completos cuando solo necesitas una sección.</li>
+              <li>Pedir respuestas larguísimas si solo querías un dato.</li>
+              <li>Seguir un tema nuevo dentro de un chat ya muy largo.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Cowork consume más</h3>
+        <p>Las tareas de Cowork son más "pesadas" (varios pasos, lectura y escritura de archivos), así que gastan más cuota que un chat normal. Vale totalmente la pena cuando la tarea lo justifica; para una duda simple, el chat regular es más económico.</p>
+
+        <div class="nota"><b>Nota — espacio para notas:</b> agregar aquí ejemplos reales de PFF —antes/después— de prompts que ahorraron consumo.</div>
+      </div>
+    </details>
+<details class="sec" open>
+      <summary>¿Qué es Cowork? <span class="chev">›</span></summary>
+      <div class="body">
+        <p><b>Cowork</b> es el modo "agente" de Claude en la app de escritorio (macOS/Windows). Le describes una tarea de varios pasos, Claude la ejecuta por su cuenta con acceso real a tus archivos, y tú regresas al resultado. No es por turnos como el chat: trabaja solo.</p>
+        <div class="grid2">
+          <div class="pro">
+            <h4>Ventajas</h4>
+            <ul>
+              <li>Acceso directo a tus archivos locales (y a Google Drive si usas Drive for Desktop).</li>
+              <li>Ejecuta tareas largas sin que estés presente.</li>
+              <li>Tareas programadas (p. ej. "cada lunes revisa la carpeta del SAT y dame un resumen").</li>
+              <li>Genera entregables completos: Excel con fórmulas, Word, PowerPoint, PDF.</li>
+              <li>Proyectos con memoria persistente: contexto y archivos propios.</li>
+            </ul>
+          </div>
+          <div class="con">
+            <h4>Limitaciones</h4>
+            <ul>
+              <li>Requiere la app de escritorio abierta. Si cierras o la compu se duerme, la tarea se detiene.</li>
+              <li>Las sesiones de Cowork <b>no se comparten</b> con otros usuarios (por ahora).</li>
+              <li>La memoria solo persiste en proyectos, no en sesiones sueltas.</li>
+              <li>Consume más cuota que el chat regular.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Regular vs. Cowork <span class="chev">›</span></summary>
+      <div class="body">
+        <table>
+          <tr><th></th><th>Claude Regular</th><th>Cowork</th></tr>
+          <tr><td>Acceso a archivos locales</td><td>No</td><td>Sí</td></tr>
+          <tr><td>Trabaja sin que estés presente</td><td>No</td><td>Sí</td></tr>
+          <tr><td>Tareas programadas</td><td>No</td><td>Sí</td></tr>
+          <tr><td>Colaboración entre usuarios</td><td>Sí (proyectos compartidos)</td><td>No (por ahora)</td></tr>
+          <tr><td>Genera Excel / Word / PPT completos</td><td>Básico</td><td>Sí, completos</td></tr>
+          <tr><td>Disponible en web / móvil</td><td>Sí</td><td>Solo escritorio</td></tr>
+          <tr><td>Consumo de cuota</td><td>Estándar</td><td>Mayor</td></tr>
+        </table>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Cuándo usar Cowork <span class="chev">›</span></summary>
+      <div class="body">
+        <ul>
+          <li>Organizar, renombrar o mover archivos en lote.</li>
+          <li>Generar expedientes, reportes o papeles de trabajo a partir de documentos existentes.</li>
+          <li>Analizar contratos, estados de cuenta o contabilidad electrónica masiva.</li>
+          <li>Crear borradores de escritos a partir de notas dispersas o transcripciones.</li>
+          <li>Cualquier flujo que implique leer, procesar y escribir varios archivos.</li>
+        </ul>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Modo del selector: Preguntar antes de actuar <span class="chev">›</span></summary>
+      <div class="body">
+        <p>En el selector de modo de Cowork elige según lo que vayas a hacer:</p>
+        <ul>
+          <li><b>Preguntar antes de actuar:</b> mantenlo así al <b>editar documentos que ya existen</b>. Claude te pide confirmación antes de sobrescribir o cambiar algo.</li>
+          <li><b>Actuar sin preguntar:</b> úsalo solo para <b>crear archivos nuevos</b>, donde no hay nada que sobrescribir.</li>
+        </ul>
+        <div class="warn"><b>Importante.</b> Con documentos de clientes, el modo seguro por defecto es "Preguntar antes de actuar".</div>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Instrucciones de carpeta al iniciar un proyecto <span class="chev">›</span></summary>
+      <div class="body">
+        <p>En la configuración de un proyecto de Cowork, define reglas explícitas desde el inicio para que Claude sepa cómo trabajar con esa carpeta:</p>
+        <ul>
+          <li><b>Dónde van borradores vs. finales:</b> por ejemplo, una subcarpeta <span class="tag">_drafts/</span> (o <span class="tag">_borradores/</span>) antes de promover a la versión final.</li>
+          <li><b>Convención de nombres:</b> <span class="tag">AAAAMMDD_NombreDocumento_v1.docx</span>.</li>
+          <li><b>Sobrescribir o versionar:</b> una regla clara, por ejemplo <b>siempre subir versión</b> (<span class="tag">_v2</span>), nunca sobrescribir.</li>
+        </ul>
+      </div>
+    </details>
+<details class="sec">
+      <summary>Google Drive + Cowork: buenas prácticas <span class="chev">›</span></summary>
+      <div class="body">
+        <div class="pasos">
+          <h4>Para trabajar con carpetas de clientes minimizando riesgos</h4>
+          <ol>
+            <li><b>Instala Google Drive for Desktop</b> para que Drive aparezca como unidad local y Cowork pueda leer los archivos.</li>
+            <li><b>Un proyecto por cliente:</b> conecta solo la carpeta de ese cliente, no todo Drive. Limita lo que Claude puede tocar.</li>
+            <li><b>Define instrucciones de carpeta desde el inicio</b> (borradores vs. finales, nombres, versionado): ver arriba "Instrucciones de carpeta al iniciar un proyecto".</li>
+            <li><b>Elige el modo correcto del selector</b> al editar vs. crear: ver arriba "Modo del selector: Preguntar antes de actuar".</li>
+            <li><b>Nunca trabajar sobre el único original:</b> Claude trabaja sobre copias o borradores; el documento fuente autorizado no se toca.</li>
+          </ol>
+        </div>
+        <div class="warn"><b>Importante — confidencialidad.</b> La información fiscal de clientes es sensible. Conecta únicamente la carpeta necesaria y revisa lo que Claude va a modificar antes de confirmarlo.</div>
+        <div class="nota"><b>Nota — espacio para notas:</b> agregar flujos de Cowork ya probados en PFF (paso a paso de los que funcionaron).</div>
+      </div>
+    </details>
+<details class="sec">
+      <summary><span class="num">3</span>Buenas prácticas <span class="chev">›</span></summary>
+      <div class="body">
+        <h3>Cómo escribir un buen prompt</h3>
+        <ul>
+          <li><b>Da contexto:</b> quién eres, para quién es el resultado y para qué lo necesitas ("soy contador, esto es para un cliente, necesito…").</li>
+          <li><b>Sé específico:</b> en vez de "resume esto", pide "resume en 5 puntos los riesgos fiscales de este contrato".</li>
+          <li><b>Indica el formato:</b> tabla, lista, memo, correo, extensión deseada.</li>
+          <li><b>Da ejemplos:</b> si tienes un escrito modelo, pégalo y di "sigue este estilo".</li>
+          <li><b>Itera:</b> la primera respuesta es un borrador. Pide ajustes ("más formal", "más corto", "agrega fundamento legal").</li>
+        </ul>
+
+        <h3>Cómo persiste el contexto (memoria)</h3>
+        <p>Claude <b>no recuerda</b> automáticamente entre conversaciones. Cada chat empieza en blanco. El contexto se conserva por tres vías:</p>
+        <ul>
+          <li><b>Instrucciones de perfil</b> (<span class="en">Instructions for Claude</span>): texto que tú escribes y aplica a todos tus chats. Solo tú las editas.</li>
+          <li><b>Instrucciones de proyecto:</b> aplican solo a los chats de ese proyecto.</li>
+          <li><b>Memoria en Cowork:</b> persiste dentro de proyectos de Cowork; las sesiones sueltas no la retienen.</li>
+        </ul>
+        <div class="tip"><b>Tip.</b> La memoria de un compañero <b>nunca</b> toca tu perfil. Cada usuario tiene su memoria aislada.</div>
+
+        <h3>Verifica siempre</h3>
+        <div class="warn"><b>Importante.</b> Claude puede equivocarse o inventar datos (fechas, artículos de ley, cifras). En materia fiscal y legal, <b>verifica</b> toda fuente, artículo y cálculo antes de usarlo con un cliente. Claude es un asistente, no la autoridad final.</div>
+
+        <h3>Confidencialidad de datos del cliente</h3>
+        <ul>
+          <li>Comparte proyectos de clientes de forma <b>individual</b> (solo quien necesita acceso), no a toda la organización.</li>
+          <li>Conecta solo las carpetas necesarias.</li>
+          <li>Revisa la política de la org sobre qué datos se pueden cargar.</li>
+        </ul>
+
+        <div class="nota"><b>Nota — espacio para notas:</b> reunir aquí prompts modelo de PFF (escritos, memos, análisis) que den buenos resultados.</div>
+      </div>
+    </details>
+  </div>
+</div>
+<script>
+(function(){
+  var input=document.getElementById('search');
+  var count=document.getElementById('scount');
+  var root=document.getElementById('contenido');
+  if(!input||!root) return;
+  var fold=(function(){
+    var map={'á':'a','à':'a','ä':'a','â':'a','é':'e','è':'e','ë':'e','ê':'e',
+      'í':'i','ì':'i','ï':'i','î':'i','ó':'o','ò':'o','ö':'o','ô':'o',
+      'ú':'u','ù':'u','ü':'u','û':'u','ñ':'n','ç':'c'};
+    return function(s){s=s.toLowerCase();var o='';for(var i=0;i<s.length;i++){var c=s[i];o+=map[c]||c;}return o;};
+  })();
+  var marks=[], cur=-1;
+  function clearMarks(){root.querySelectorAll('mark.hit').forEach(function(m){m.parentNode.replaceChild(document.createTextNode(m.textContent),m);});root.normalize();marks=[];cur=-1;}
+  function textNodes(el){var out=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+    if(!n.nodeValue.trim())return NodeFilter.FILTER_REJECT;var p=n.parentNode.nodeName.toLowerCase();
+    if(p==='script'||p==='style'||p==='mark')return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT;}});
+    var n;while((n=w.nextNode()))out.push(n);return out;}
+  function openAncestors(m){var p=m.parentNode;while(p&&p!==root){if(p.tagName&&p.tagName.toLowerCase()==='details')p.open=true;p=p.parentNode;}}
+  function run(){
+    clearMarks();var q=input.value.trim();if(q.length<2){count.textContent='';return;}var qf=fold(q);
+    textNodes(root).forEach(function(node){var text=node.nodeValue,tf=fold(text),idx=0,hits=[];
+      while((idx=tf.indexOf(qf,idx))!==-1){hits.push(idx);idx+=qf.length;}if(!hits.length)return;
+      var frag=document.createDocumentFragment(),last=0;
+      hits.forEach(function(h){if(h>last)frag.appendChild(document.createTextNode(text.slice(last,h)));
+        var m=document.createElement('mark');m.className='hit';m.textContent=text.slice(h,h+q.length);frag.appendChild(m);last=h+q.length;});
+      if(last<text.length)frag.appendChild(document.createTextNode(text.slice(last)));node.parentNode.replaceChild(frag,node);});
+    marks=Array.prototype.slice.call(root.querySelectorAll('mark.hit'));marks.forEach(openAncestors);
+    count.textContent=marks.length?marks.length+' coincidencia'+(marks.length>1?'s':''):'sin coincidencias';
+    if(marks.length){cur=0;focusCur();}
+  }
+  function focusCur(){marks.forEach(function(m){m.classList.remove('cur');});
+    if(cur>=0&&marks[cur]){marks[cur].classList.add('cur');if(marks[cur].scrollIntoView)marks[cur].scrollIntoView({block:'center',behavior:'smooth'});}}
+  input.addEventListener('input',run);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter'&&marks.length){e.preventDefault();cur=(cur+(e.shiftKey?-1:1)+marks.length)%marks.length;focusCur();}});
+})();
+</script>
+<script>
+(function(){
+  var toc=document.getElementById('toc');
+  var root=document.getElementById('contenido');
+  if(!toc||!root) return;
+  var ul=document.createElement('ul');
+  var head=document.createElement('div'); head.className='toch'; head.textContent='En esta página';
+  toc.appendChild(head); toc.appendChild(ul);
+  var i=0, items=0;
+  Array.prototype.forEach.call(root.children,function(el){
+    if(el.classList && el.classList.contains('grouptitle')){
+      var g=document.createElement('li'); g.className='tocgroup'; g.textContent=el.textContent.trim(); ul.appendChild(g); return;
+    }
+    if(el.tagName && el.tagName.toLowerCase()==='details'){
+      var sum=el.querySelector('summary'); if(!sum) return;
+      var txt=sum.textContent.replace(/›/g,'').trim();
+      if(!el.id) el.id='sec-'+(i++);
+      var li=document.createElement('li');
+      var a=document.createElement('a'); a.href='#'+el.id; a.textContent=txt;
+      a.addEventListener('click',function(ev){ev.preventDefault(); el.open=true;
+        if(el.scrollIntoView) el.scrollIntoView({block:'start',behavior:'smooth'});});
+      li.appendChild(a); ul.appendChild(li); items++;
+    }
+  });
+  if(items===0){
+    head.textContent='Ir a la letra';
+    Array.prototype.forEach.call(root.querySelectorAll('.letra'),function(el){
+      if(!el.id) el.id='letra-'+el.textContent.trim();
+      var li=document.createElement('li');
+      var a=document.createElement('a'); a.href='#'+el.id; a.textContent=el.textContent.trim();
+      a.addEventListener('click',function(ev){ev.preventDefault(); if(el.scrollIntoView) el.scrollIntoView({block:'start',behavior:'smooth'});});
+      li.appendChild(a); ul.appendChild(li);
+    });
+  }
+})();
+</script>
+</body>
+</html>
